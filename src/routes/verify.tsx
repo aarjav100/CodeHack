@@ -1,4 +1,4 @@
-﻿import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Check, ShieldCheck, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -34,16 +34,24 @@ function Verify() {
     setErr("");
     if (step === 0) {
       if (kind === "student") {
-        if (!/^[^@\s]+@stxavier\.edu\.in$/.test(email)) return setErr("Use your college email ending in @stxavier.edu.in");
-        if (!/^SXC\d{2}[A-Z]{3}\d{3}$/.test(enr)) return setErr("Enrollment ID looks like SXC22PHY041");
-      } else if (!/^\d{10}$/.test(phone)) return setErr("Enter a 10-digit phone number");
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+          return setErr("Please enter a valid email address (e.g. name@college.edu.in)");
+        }
+        if (!enr.trim() || enr.trim().length < 3) {
+          return setErr("Enrollment ID should be at least 3 characters (e.g. SXC22PHY041 or your college ID)");
+        }
+      } else if (!/^\d{10}$/.test(phone.replace(/\D/g, ""))) {
+        return setErr("Enter a valid 10-digit phone number");
+      }
     }
-    if (step === 1 && photos.length === 0) return setErr("Please upload a photo of your ID card");
+    if (step === 1 && photos.length === 0) {
+      return setErr("Please upload an ID card photo, or click 'Use demo sample photo'");
+    }
     if (step === 2) {
       if (!/^\d{6}$/.test(otp)) return setErr("Enter all 6 digits");
-      const r = kind === "student" ? "verified" : "pending";
+      const r = "verified";
       setResult(r);
-      verify(r, { email, enrollment: enr });
+      verify(r, { email: email.trim(), enrollment: enr.trim().toUpperCase() });
     }
     setStep(step + 1);
   };
@@ -68,6 +76,25 @@ function Verify() {
       <div className="rounded-2xl border bg-card p-6 shadow-soft">
         {step === 0 && (
           <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Role type</span>
+              <button
+                type="button"
+                onClick={() => {
+                  if (kind === "student") {
+                    setEmail("aarav.s@stxavier.edu.in");
+                    setEnr("SXC22PHY041");
+                  } else {
+                    setPhone("9876543210");
+                    setIdType("Aadhaar card");
+                  }
+                  setErr("");
+                }}
+                className="inline-flex items-center gap-1 rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
+              >
+                ⚡ Fill demo details
+              </button>
+            </div>
             <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="I am a">
               {(["student", "citizen"] as const).map((k) => (
                 <button key={k} role="radio" aria-checked={kind === k} onClick={() => setKind(k)} className={cn("rounded-xl border p-3 text-sm font-medium", kind === k && "border-primary bg-primary/5")}>{k === "student" ? "College student" : "Community member"}</button>
@@ -75,8 +102,12 @@ function Verify() {
             </div>
             {kind === "student" ? (
               <>
-                <Field label="College email" htmlFor="em"><Input id="em" value={email} onChange={(e) => setEmail(e.target.value)} /></Field>
-                <Field label="Enrollment ID" htmlFor="enr" hint="Printed on your college ID, e.g. SXC22PHY041"><Input id="enr" value={enr} onChange={(e) => setEnr(e.target.value.toUpperCase())} /></Field>
+                <Field label="College email" htmlFor="em" hint="Accepts your college email (e.g. @kiet.edu.in, @stxavier.edu.in, or any email)">
+                  <Input id="em" placeholder="e.g. yourname@kiet.edu.in" value={email} onChange={(e) => setEmail(e.target.value)} />
+                </Field>
+                <Field label="Enrollment ID" htmlFor="enr" hint="Printed on your college ID, e.g. SXC22PHY041, KIET25CSE, or your college roll number">
+                  <Input id="enr" placeholder="e.g. SXC22PHY041" value={enr} onChange={(e) => setEnr(e.target.value.toUpperCase())} />
+                </Field>
               </>
             ) : (
               <>
@@ -88,7 +119,25 @@ function Verify() {
             )}
           </div>
         )}
-        {step === 1 && <div><h2 className="mb-3 font-semibold">Upload your {kind === "student" ? "college ID card" : idType}</h2><PhotoDrop value={photos} onChange={setPhotos} max={2} label="Drag your ID photo here, or click to choose" /><p className="mt-3 text-xs text-muted-foreground">Tip: Cover your ID number with your finger — we only need your name and photo.</p></div>}
+        {step === 1 && (
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-semibold">Upload your {kind === "student" ? "college ID card" : idType}</h2>
+              <button
+                type="button"
+                onClick={() => {
+                  setPhotos(["https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=70"]);
+                  setErr("");
+                }}
+                className="inline-flex items-center gap-1 rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
+              >
+                ⚡ Use demo sample photo
+              </button>
+            </div>
+            <PhotoDrop value={photos} onChange={setPhotos} max={2} label="Drag your ID photo here, or click to choose" />
+            <p className="mt-3 text-xs text-muted-foreground">Tip: Cover your ID number with your finger — we only need your name and photo.</p>
+          </div>
+        )}
         {step === 2 && (
           <div className="text-center">
             <h2 className="font-semibold">Enter the 6-digit code</h2>
@@ -98,7 +147,7 @@ function Verify() {
                 <InputOTPGroup>{[0, 1, 2, 3, 4, 5].map((i) => <InputOTPSlot key={i} index={i} className="h-12 w-11 text-lg" />)}</InputOTPGroup>
               </InputOTP>
             </div>
-            <button className="mt-3 text-sm text-primary underline" onClick={() => setOtp("123456")}>Fill demo code</button>
+            <button type="button" className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary underline" onClick={() => setOtp("123456")}>⚡ Fill demo code (123456)</button>
           </div>
         )}
         {step === 3 && (
