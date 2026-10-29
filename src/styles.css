@@ -1,0 +1,223 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-teal: var(--teal);
+  --color-teal-foreground: var(--teal-foreground);
+  --color-amber: var(--amber);
+  --color-amber-foreground: var(--amber-foreground);
+  --color-cat-study: var(--cat-study);
+  --color-cat-career: var(--cat-career);
+  --color-cat-workshop: var(--cat-workshop);
+  --color-cat-health: var(--cat-health);
+  --color-cat-scheme: var(--cat-scheme);
+  --color-st-approved: var(--st-approved);
+  --color-st-pending: var(--st-pending);
+  --color-st-waitlisted: var(--st-waitlisted);
+  --color-st-rejected: var(--st-rejected);
+  --color-st-active: var(--st-active);
+  --color-st-completed: var(--st-completed);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.875rem;
+  --background: oklch(0.984 0.003 247.858);
+  --foreground: oklch(0.208 0.042 265.755);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.208 0.042 265.755);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.208 0.042 265.755);
+  --primary: oklch(0.398 0.195 277.4);
+  --primary-foreground: oklch(0.985 0.01 277);
+  --secondary: oklch(0.955 0.02 277);
+  --secondary-foreground: oklch(0.33 0.16 277);
+  --muted: oklch(0.968 0.007 247.896);
+  --muted-foreground: oklch(0.5 0.04 257);
+  --accent: oklch(0.955 0.03 184);
+  --accent-foreground: oklch(0.4 0.08 184);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.929 0.013 255.508);
+  --input: oklch(0.9 0.015 255.5);
+  --ring: oklch(0.398 0.195 277.4);
+  --teal: oklch(0.6 0.118 184.7);
+  --teal-foreground: oklch(0.99 0 0);
+  --amber: oklch(0.769 0.188 70.08);
+  --amber-foreground: oklch(0.28 0.07 50);
+  --cat-study: oklch(0.51 0.23 277);
+  --cat-career: oklch(0.67 0.17 60);
+  --cat-workshop: oklch(0.6 0.118 184.7);
+  --cat-health: oklch(0.6 0.22 12);
+  --cat-scheme: oklch(0.62 0.15 237);
+  --st-approved: oklch(0.56 0.16 150);
+  --st-pending: oklch(0.64 0.16 65);
+  --st-waitlisted: oklch(0.55 0.22 293);
+  --st-rejected: oklch(0.56 0.22 27);
+  --st-active: oklch(0.55 0.2 259);
+  --st-completed: oklch(0.5 0.03 257);
+  --chart-1: oklch(0.51 0.23 277);
+  --chart-2: oklch(0.6 0.118 184.7);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.6 0.22 12);
+  --chart-5: oklch(0.62 0.15 237);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.3 0.04 265);
+  --sidebar-primary: oklch(0.398 0.195 277.4);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.955 0.02 277);
+  --sidebar-accent-foreground: oklch(0.33 0.16 277);
+  --sidebar-border: oklch(0.929 0.013 255.508);
+  --sidebar-ring: oklch(0.398 0.195 277.4);
+  --shadow-soft: 0 1px 2px oklch(0.2 0.04 265 / 0.04), 0 4px 16px -4px oklch(0.2 0.04 265 / 0.08);
+  --shadow-lift: 0 2px 4px oklch(0.2 0.04 265 / 0.05), 0 16px 40px -12px oklch(0.398 0.195 277.4 / 0.22);
+  --gradient-hero: radial-gradient(1200px 500px at 10% -10%, oklch(0.398 0.195 277.4 / 0.14), transparent 60%), radial-gradient(900px 400px at 100% 0%, oklch(0.6 0.118 184.7 / 0.14), transparent 60%), radial-gradient(700px 300px at 50% 100%, oklch(0.769 0.188 70.08 / 0.12), transparent 60%);
+  --gradient-brand: linear-gradient(135deg, oklch(0.398 0.195 277.4), oklch(0.5 0.15 230), oklch(0.6 0.118 184.7));
+}
+
+.dark {
+  --background: oklch(0.18 0.03 262);
+  --foreground: oklch(0.96 0.01 255);
+  --card: oklch(0.22 0.035 262);
+  --card-foreground: oklch(0.96 0.01 255);
+  --popover: oklch(0.22 0.035 262);
+  --popover-foreground: oklch(0.96 0.01 255);
+  --primary: oklch(0.68 0.16 277);
+  --primary-foreground: oklch(0.16 0.05 277);
+  --secondary: oklch(0.28 0.05 270);
+  --secondary-foreground: oklch(0.9 0.05 277);
+  --muted: oklch(0.26 0.03 262);
+  --muted-foreground: oklch(0.72 0.03 257);
+  --accent: oklch(0.28 0.05 184);
+  --accent-foreground: oklch(0.88 0.08 184);
+  --destructive: oklch(0.68 0.19 22);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.68 0.16 277);
+  --teal: oklch(0.7 0.12 184.7);
+  --teal-foreground: oklch(0.16 0.04 184);
+  --amber: oklch(0.8 0.16 75);
+  --cat-study: oklch(0.7 0.16 277);
+  --cat-career: oklch(0.78 0.15 70);
+  --cat-workshop: oklch(0.72 0.12 184);
+  --cat-health: oklch(0.72 0.17 12);
+  --cat-scheme: oklch(0.74 0.13 237);
+  --st-approved: oklch(0.72 0.16 150);
+  --st-pending: oklch(0.8 0.15 75);
+  --st-waitlisted: oklch(0.72 0.17 293);
+  --st-rejected: oklch(0.7 0.19 25);
+  --st-active: oklch(0.72 0.15 259);
+  --st-completed: oklch(0.7 0.03 257);
+  --sidebar: oklch(0.2 0.032 262);
+  --sidebar-foreground: oklch(0.9 0.01 255);
+  --sidebar-accent: oklch(0.28 0.05 270);
+  --sidebar-accent-foreground: oklch(0.92 0.05 277);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.3), 0 4px 16px -4px oklch(0 0 0 / 0.4);
+  --shadow-lift: 0 16px 40px -12px oklch(0 0 0 / 0.6);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+}
+
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+@utility shadow-lift {
+  box-shadow: var(--shadow-lift);
+}
+@utility bg-hero {
+  background-image: var(--gradient-hero);
+}
+@utility bg-brand {
+  background-image: var(--gradient-brand);
+}
+@utility glass {
+  background-color: color-mix(in oklab, var(--background) 75%, transparent);
+  backdrop-filter: blur(14px) saturate(1.4);
+}
+@utility lift {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@utility bg-contested {
+  background-image: repeating-linear-gradient(135deg, color-mix(in oklab, var(--amber) 35%, transparent) 0 8px, color-mix(in oklab, var(--st-waitlisted) 25%, transparent) 8px 16px);
+}
+@utility bar-grow {
+  transform-origin: left;
+  animation: bar-grow 600ms ease-out;
+}
+@keyframes bar-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
