@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -14,7 +14,7 @@ import type { Requirement, Resource } from "@/data/types";
 
 export const Route = createFileRoute("/resources/new")({
   validateSearch: z.object({ edit: z.string().optional() }),
-  head: () => ({ meta: [{ title: "List a resource — CampusSphere" }, { name: "description", content: "Add a lab, hall, classroom or equipment with rules and requirements." }, { property: "og:title", content: "List a resource — CampusSphere" }, { property: "og:description", content: "Share an underused space." }] }),
+  head: () => ({ meta: [{ title: "List a resource — CampusSphare" }, { name: "description", content: "Add a lab, hall, classroom or equipment with rules and requirements." }, { property: "og:title", content: "List a resource — CampusSphare" }, { property: "og:description", content: "Share an underused space." }] }),
   component: NewResource,
 });
 
@@ -108,3 +108,4 @@ function NewResource() {
     </div>
   );
 }
+

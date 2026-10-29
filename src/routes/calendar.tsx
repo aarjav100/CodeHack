@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { addDays, format } from "date-fns";
 import { Lock } from "lucide-react";
@@ -13,7 +13,7 @@ import { endOf, fromMin, toMin } from "@/lib/contest";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/calendar")({
-  head: () => ({ meta: [{ title: "Campus calendar — CampusSphere" }, { name: "description", content: "See every space's booked, contested, program and free time on one timeline." }, { property: "og:title", content: "Campus calendar — CampusSphere" }, { property: "og:description", content: "One timeline for every shared space." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
+  head: () => ({ meta: [{ title: "Campus calendar — CampusSphare" }, { name: "description", content: "See every space's booked, contested, program and free time on one timeline." }, { property: "og:title", content: "Campus calendar — CampusSphare" }, { property: "og:description", content: "One timeline for every shared space." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: CalendarPage,
 });
 
@@ -120,3 +120,4 @@ function CalendarPage() {
     </div>
   );
 }
+

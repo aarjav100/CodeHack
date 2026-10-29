@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import { useApp } from "@/store/app";
@@ -6,7 +6,7 @@ import { ConditionForm } from "@/components/ConditionForm";
 import { EmptyState, fmtD } from "@/components/shared";
 
 export const Route = createFileRoute("/checkin/$id")({
-  head: () => ({ meta: [{ title: "Check in — CampusSphere" }, { name: "description", content: "Record the condition of the space before you start." }, { property: "og:title", content: "Check in — CampusSphere" }, { property: "og:description", content: "Condition checklist at check-in." }] }),
+  head: () => ({ meta: [{ title: "Check in — CampusSphare" }, { name: "description", content: "Record the condition of the space before you start." }, { property: "og:title", content: "Check in — CampusSphare" }, { property: "og:description", content: "Condition checklist at check-in." }] }),
   component: CheckIn,
 });
 
@@ -26,3 +26,4 @@ function CheckIn() {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Check, ShieldCheck, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { useApp, useMe } from "@/store/app";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/verify")({
-  head: () => ({ meta: [{ title: "Verify your identity — CampusSphere" }, { name: "description", content: "A quick 4-step identity check so spaces stay safe." }, { property: "og:title", content: "Verify identity — CampusSphere" }, { property: "og:description", content: "Quick identity check." }] }),
+  head: () => ({ meta: [{ title: "Verify your identity — CampusSphare" }, { name: "description", content: "A quick 4-step identity check so spaces stay safe." }, { property: "og:title", content: "Verify identity — CampusSphare" }, { property: "og:description", content: "Quick identity check." }] }),
   component: Verify,
 });
 
@@ -125,3 +125,4 @@ function Verify() {
     </div>
   );
 }
+

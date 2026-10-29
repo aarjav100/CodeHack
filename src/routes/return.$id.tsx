@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import { useApp } from "@/store/app";
@@ -6,7 +6,7 @@ import { ConditionForm } from "@/components/ConditionForm";
 import { EmptyState } from "@/components/shared";
 
 export const Route = createFileRoute("/return/$id")({
-  head: () => ({ meta: [{ title: "Return — CampusSphere" }, { name: "description", content: "Compare the condition with check-in and hand back." }, { property: "og:title", content: "Return — CampusSphere" }, { property: "og:description", content: "Return checklist with differences highlighted." }] }),
+  head: () => ({ meta: [{ title: "Return — CampusSphare" }, { name: "description", content: "Compare the condition with check-in and hand back." }, { property: "og:title", content: "Return — CampusSphare" }, { property: "og:description", content: "Return checklist with differences highlighted." }] }),
   component: Return,
 });
 
@@ -32,3 +32,4 @@ function Return() {
     </div>
   );
 }
+

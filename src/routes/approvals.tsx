@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Check, Clock, Inbox, Sparkles, X, AlertTriangle } from "lucide-react";
@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import type { Booking } from "@/data/types";
 
 export const Route = createFileRoute("/approvals")({
-  head: () => ({ meta: [{ title: "Approvals inbox — CampusSphere" }, { name: "description", content: "Review booking requests with Fair-Share insights, eligibility and conflicts." }, { property: "og:title", content: "Approvals inbox — CampusSphere" }, { property: "og:description", content: "Review booking requests fairly." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
+  head: () => ({ meta: [{ title: "Approvals inbox — CampusSphare" }, { name: "description", content: "Review booking requests with Fair-Share insights, eligibility and conflicts." }, { property: "og:title", content: "Approvals inbox — CampusSphare" }, { property: "og:description", content: "Review booking requests fairly." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Approvals,
 });
 
@@ -133,3 +133,4 @@ function Approvals() {
     </div>
   );
 }
+

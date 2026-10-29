@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -18,7 +18,7 @@ import { Countdown } from "@/components/contest";
 import { Flame } from "lucide-react";
 
 export const Route = createFileRoute("/book/$id")({
-  head: () => ({ meta: [{ title: "Request a booking — CampusSphere" }, { name: "description", content: "Choose a date, time and purpose to request a space." }, { property: "og:title", content: "Request a booking — CampusSphere" }, { property: "og:description", content: "Request a campus space or equipment." }] }),
+  head: () => ({ meta: [{ title: "Request a booking — CampusSphare" }, { name: "description", content: "Choose a date, time and purpose to request a space." }, { property: "og:title", content: "Request a booking — CampusSphare" }, { property: "og:description", content: "Request a campus space or equipment." }] }),
   component: Book,
 });
 
@@ -106,3 +106,4 @@ function Book() {
     </div>
   );
 }
+

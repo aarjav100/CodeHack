@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ArrowLeft, BellPlus, Scale, ShieldCheck, ShieldAlert, AlertTriangle, Info, CheckCircle2, XCircle, Hourglass, FastForward, MessageSquareMore, Siren } from "lucide-react";
@@ -13,7 +13,7 @@ import { displayName, explainResult, rankContest } from "@/lib/contest";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/contests/$id")({
-  head: () => ({ meta: [{ title: "Competing requests — CampusSphere" }, { name: "description", content: "See who wants this slot, how it will be decided and the result." }, { property: "og:title", content: "Contest — CampusSphere" }, { property: "og:description", content: "Fair, transparent slot decisions." }] }),
+  head: () => ({ meta: [{ title: "Competing requests — CampusSphare" }, { name: "description", content: "See who wants this slot, how it will be decided and the result." }, { property: "og:title", content: "Contest — CampusSphare" }, { property: "og:description", content: "Fair, transparent slot decisions." }] }),
   component: ContestPage,
 });
 
@@ -184,3 +184,4 @@ function ContestPage() {
     </div>
   );
 }
+

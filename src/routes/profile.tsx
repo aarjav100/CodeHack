@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { Role } from "@/data/types";
@@ -12,7 +12,7 @@ import { ROLE_HOME, ROLE_LABEL } from "@/components/AppShell";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/profile")({
-  head: () => ({ meta: [{ title: "Profile & skills passport — CampusSphere" }, { name: "description", content: "Your verification, badges, community hours and unlocked spaces." }, { property: "og:title", content: "Profile — CampusSphere" }, { property: "og:description", content: "Skills passport and community hours." }] }),
+  head: () => ({ meta: [{ title: "Profile & skills passport — CampusSphare" }, { name: "description", content: "Your verification, badges, community hours and unlocked spaces." }, { property: "og:title", content: "Profile — CampusSphare" }, { property: "og:description", content: "Skills passport and community hours." }] }),
   component: Profile,
 });
 
@@ -162,3 +162,4 @@ function Profile() {
     </div>
   );
 }
+

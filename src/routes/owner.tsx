@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { addDays, format } from "date-fns";
 import { Building2, Gauge, Inbox, Sparkles, Wrench } from "lucide-react";
@@ -10,7 +10,7 @@ import { useApp } from "@/store/app";
 import { TODAY } from "@/data/mock";
 
 export const Route = createFileRoute("/owner")({
-  head: () => ({ meta: [{ title: "Owner dashboard — CampusSphere" }, { name: "description", content: "Utilization, pending requests and condition reports for your spaces." }, { property: "og:title", content: "Owner dashboard — CampusSphere" }, { property: "og:description", content: "Run your shared spaces." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
+  head: () => ({ meta: [{ title: "Owner dashboard — CampusSphare" }, { name: "description", content: "Utilization, pending requests and condition reports for your spaces." }, { property: "og:title", content: "Owner dashboard — CampusSphare" }, { property: "og:description", content: "Run your shared spaces." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Owner,
 });
 
@@ -63,3 +63,4 @@ function Owner() {
     </div>
   );
 }
+

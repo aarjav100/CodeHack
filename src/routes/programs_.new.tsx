@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
@@ -13,7 +13,7 @@ import { overlaps } from "@/lib/logic";
 import type { Category, Program } from "@/data/types";
 
 export const Route = createFileRoute("/programs_/new")({
-  head: () => ({ meta: [{ title: "Create a program — CampusSphere" }, { name: "description", content: "Plan a community program and reserve its space automatically." }, { property: "og:title", content: "Create a program — CampusSphere" }, { property: "og:description", content: "Plan a program and reserve a space." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
+  head: () => ({ meta: [{ title: "Create a program — CampusSphare" }, { name: "description", content: "Plan a community program and reserve its space automatically." }, { property: "og:title", content: "Create a program — CampusSphare" }, { property: "og:description", content: "Plan a program and reserve a space." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: NewProgram,
 });
 
@@ -68,3 +68,4 @@ function NewProgram() {
     </div>
   );
 }
+

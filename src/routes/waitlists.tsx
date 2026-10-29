@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { ListOrdered } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { fairScore } from "@/lib/logic";
 import { endOf } from "@/lib/contest";
 
 export const Route = createFileRoute("/waitlists")({
-  head: () => ({ meta: [{ title: "Waiting lists — CampusSphere" }, { name: "description", content: "Your queue positions, timed offers and room queues ranked by Fair-Share Score." }, { property: "og:title", content: "Waiting lists — CampusSphere" }, { property: "og:description", content: "Fair, transparent waiting lists." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
+  head: () => ({ meta: [{ title: "Waiting lists — CampusSphare" }, { name: "description", content: "Your queue positions, timed offers and room queues ranked by Fair-Share Score." }, { property: "og:title", content: "Waiting lists — CampusSphare" }, { property: "og:description", content: "Fair, transparent waiting lists." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Waitlists,
 });
 
@@ -77,3 +77,4 @@ function Waitlists() {
     </div>
   );
 }
+

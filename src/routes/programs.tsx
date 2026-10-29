@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { CalendarSearch, MapPin, Globe } from "lucide-react";
@@ -11,7 +11,7 @@ import { d } from "@/data/mock";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/programs")({
-  head: () => ({ meta: [{ title: "Community programs — CampusSphere" }, { name: "description", content: "Free study center, career talks, skill workshops, health camps and scheme help." }, { property: "og:title", content: "Programs hub — CampusSphere" }, { property: "og:description", content: "Free community programs on campus." }] }),
+  head: () => ({ meta: [{ title: "Community programs — CampusSphare" }, { name: "description", content: "Free study center, career talks, skill workshops, health camps and scheme help." }, { property: "og:title", content: "Programs hub — CampusSphare" }, { property: "og:description", content: "Free community programs on campus." }] }),
   component: Programs,
 });
 
@@ -82,3 +82,4 @@ function Programs() {
     </div>
   );
 }
+

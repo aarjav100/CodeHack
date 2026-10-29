@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Search, Users, MapPin, SearchX, CheckCircle2, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,7 @@ import { eligibility } from "@/lib/logic";
 import { DemandBadge } from "@/components/contest";
 
 export const Route = createFileRoute("/discover")({
-  head: () => ({ meta: [{ title: "Discover spaces & equipment — CampusSphere" }, { name: "description", content: "Search labs, halls, classrooms and equipment you can request." }, { property: "og:title", content: "Discover spaces — CampusSphere" }, { property: "og:description", content: "Search labs, halls and equipment." }] }),
+  head: () => ({ meta: [{ title: "Discover spaces & equipment — CampusSphare" }, { name: "description", content: "Search labs, halls, classrooms and equipment you can request." }, { property: "og:title", content: "Discover spaces — CampusSphare" }, { property: "og:description", content: "Search labs, halls and equipment." }] }),
   component: Discover,
 });
 
@@ -85,3 +85,4 @@ function Discover() {
     </div>
   );
 }
+

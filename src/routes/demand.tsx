@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Flame, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { useApp } from "@/store/app";
 import { displayName } from "@/lib/contest";
 
 export const Route = createFileRoute("/demand")({
-  head: () => ({ meta: [{ title: "Live demand — CampusSphere" }, { name: "description", content: "Every contested slot across the college, sorted by when the decision is made." }, { property: "og:title", content: "Live demand — CampusSphere" }, { property: "og:description", content: "See which slots are in demand." }] }),
+  head: () => ({ meta: [{ title: "Live demand — CampusSphare" }, { name: "description", content: "Every contested slot across the college, sorted by when the decision is made." }, { property: "og:title", content: "Live demand — CampusSphare" }, { property: "og:description", content: "See which slots are in demand." }] }),
   component: Demand,
 });
 
@@ -63,3 +63,4 @@ function Demand() {
     </div>
   );
 }
+

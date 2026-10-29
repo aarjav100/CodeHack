@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+﻿import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { CheckCircle2, XCircle, MapPin, Users, Clock, ArrowLeft, Pencil, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Img, Panel, StatusBadge, fmtD } from "@/components/shared";
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/resources/$id")({
     const r = seed.find((x) => x.id === params.id);
     return { name: r?.name ?? "Resource" };
   },
-  head: ({ loaderData }) => ({ meta: [{ title: `${loaderData?.name ?? "Resource"} — CampusSphere` }, { name: "description", content: `Rules, availability and eligibility for ${loaderData?.name ?? "this resource"}.` }, { property: "og:title", content: `${loaderData?.name ?? "Resource"} — CampusSphere` }, { property: "og:description", content: "Check eligibility and request a booking." }] }),
+  head: ({ loaderData }) => ({ meta: [{ title: `${loaderData?.name ?? "Resource"} — CampusSphare` }, { name: "description", content: `Rules, availability and eligibility for ${loaderData?.name ?? "this resource"}.` }, { property: "og:title", content: `${loaderData?.name ?? "Resource"} — CampusSphare` }, { property: "og:description", content: "Check eligibility and request a booking." }] }),
   component: Detail,
 });
 
@@ -97,3 +97,4 @@ function Detail() {
     </div>
   );
 }
+

@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { Lightbulb } from "lucide-react";
 import { FACTOR_LABELS, FactorBars, FairGauge, PageHeader, Panel } from "@/components/shared";
 import { useApp, useMe } from "@/store/app";
 import type { FairFactors } from "@/data/types";
 
 export const Route = createFileRoute("/fair-share")({
-  head: () => ({ meta: [{ title: "Fair-Share Score — CampusSphere" }, { name: "description", content: "How limited seats and slots are shared fairly, explained." }, { property: "og:title", content: "Fair-Share Score — CampusSphere" }, { property: "og:description", content: "Transparent, explainable allocation." }] }),
+  head: () => ({ meta: [{ title: "Fair-Share Score — CampusSphare" }, { name: "description", content: "How limited seats and slots are shared fairly, explained." }, { property: "og:title", content: "Fair-Share Score — CampusSphare" }, { property: "og:description", content: "Transparent, explainable allocation." }] }),
   component: Fair,
 });
 
@@ -38,3 +38,4 @@ function Fair() {
     </div>
   );
 }
+

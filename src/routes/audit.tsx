@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { ScrollText } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -7,7 +7,7 @@ import { EmptyState, ListSkeleton, PageHeader, fmtDT, useFakeLoad } from "@/comp
 import { useApp } from "@/store/app";
 
 export const Route = createFileRoute("/audit")({
-  head: () => ({ meta: [{ title: "Audit log — CampusSphere" }, { name: "description", content: "Append-only record of every decision. No health data is ever logged." }, { property: "og:title", content: "Audit log — CampusSphere" }, { property: "og:description", content: "Append-only decision history." }] }),
+  head: () => ({ meta: [{ title: "Audit log — CampusSphare" }, { name: "description", content: "Append-only record of every decision. No health data is ever logged." }, { property: "og:title", content: "Audit log — CampusSphare" }, { property: "og:description", content: "Append-only decision history." }] }),
   component: Audit,
 });
 
@@ -54,3 +54,4 @@ function Audit() {
     </div>
   );
 }
+

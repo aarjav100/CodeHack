@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { BellOff, Timer } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { useApp, useMe } from "@/store/app";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/notifications")({
-  head: () => ({ meta: [{ title: "Notifications — CampusSphere" }, { name: "description", content: "Approvals, reminders, waitlist offers and more." }, { property: "og:title", content: "Notifications — CampusSphere" }, { property: "og:description", content: "Your CampusSphere updates." }] }),
+  head: () => ({ meta: [{ title: "Notifications — CampusSphare" }, { name: "description", content: "Approvals, reminders, waitlist offers and more." }, { property: "og:title", content: "Notifications — CampusSphare" }, { property: "og:description", content: "Your CampusSphare updates." }] }),
   component: Notifications,
 });
 
@@ -56,3 +56,4 @@ function Notifications() {
     </div>
   );
 }
+

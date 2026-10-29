@@ -126,9 +126,9 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Menu className="h-5 w-5" />
             </button>
           )}
-          <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold">
-            <span className="grid h-8 w-8 place-items-center rounded-xl bg-brand text-primary-foreground"><Sparkles className="h-4.5 w-4.5" /></span>
-            <span className="hidden sm:inline">CampusSphere</span>
+          <Link to="/" className="flex items-center gap-2.5 font-display text-lg font-bold">
+            <img src="/logo.png" alt="CampusSphare Logo" className="h-9 w-9 rounded-xl object-contain shadow-sm" />
+            <span className="hidden sm:inline">CampusSphare</span>
           </Link>
           <div className="ml-auto flex items-center gap-1.5">
             <Select value={role} onValueChange={(v) => setRole(v as Role)}>
@@ -175,7 +175,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="absolute inset-0 bg-foreground/40 animate-in fade-in" onClick={() => setOpen(false)} />
           <div className="absolute inset-y-0 left-0 w-72 overflow-y-auto bg-sidebar p-4 shadow-lift animate-in slide-in-from-left duration-200">
             <div className="mb-4 flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Account</span>
+              <div className="flex items-center gap-2">
+                <img src="/logo.png" alt="CampusSphare Logo" className="h-7 w-7 rounded-lg object-contain" />
+                <span className="font-display font-bold text-base">CampusSphare</span>
+              </div>
               <button aria-label="Close menu" className="grid h-10 w-10 place-items-center rounded-xl hover:bg-muted" onClick={() => setOpen(false)}><X className="h-5 w-5" /></button>
             </div>
             <Link to="/profile" onClick={() => setOpen(false)} className="mb-4 flex items-center gap-3 rounded-2xl border bg-card p-3 shadow-sm hover:bg-muted">

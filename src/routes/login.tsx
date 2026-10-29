@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -14,10 +14,10 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "Sign in or sign up — CampusSphere" },
-      { name: "description", content: "Sign in or create a CampusSphere account as a student, organisation, speaker or health camp." },
-      { property: "og:title", content: "Sign in or sign up — CampusSphere" },
-      { property: "og:description", content: "Create your CampusSphere account." },
+      { title: "Sign in or sign up — CampusSphare" },
+      { name: "description", content: "Sign in or create a CampusSphare account as a student, organisation, speaker or health camp." },
+      { property: "og:title", content: "Sign in or sign up — CampusSphare" },
+      { property: "og:description", content: "Create your CampusSphare account." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -40,7 +40,7 @@ const defaultAccounts: { name: string; email: string; type: AccType; password: s
 const getStoredAccounts = () => {
   if (typeof window === "undefined") return defaultAccounts;
   try {
-    const raw = localStorage.getItem("campussphere_accounts");
+    const raw = localStorage.getItem("CampusSphare_accounts");
     if (raw) {
       const parsed = JSON.parse(raw);
       const emails = new Set(parsed.map((a: { email: string }) => a.email.toLowerCase()));
@@ -53,7 +53,7 @@ const getStoredAccounts = () => {
 const saveAccounts = (accs: { name: string; email: string; type: AccType; password: string }[]) => {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem("campussphere_accounts", JSON.stringify(accs));
+    localStorage.setItem("CampusSphare_accounts", JSON.stringify(accs));
   } catch {}
 };
 
@@ -153,6 +153,11 @@ function Login() {
           </div>
         )}
 
+        <div className="mb-5 flex items-center gap-3">
+          <img src="/logo.png" alt="CampusSphare Logo" className="h-10 w-10 rounded-2xl object-contain shadow-sm" />
+          <span className="font-display text-xl font-bold">CampusSphare</span>
+        </div>
+
         <h1 className="text-3xl font-bold">{mode === "in" ? "Welcome back" : "Create your account"}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {mode === "in" ? "Sign in to access your spaces and bookings." : "Register with your name to get started immediately."}
@@ -204,3 +209,4 @@ function Login() {
     </div>
   );
 }
+

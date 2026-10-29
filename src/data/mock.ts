@@ -242,7 +242,7 @@ export const incidents: Incident[] = [
 export const notifications: Notification[] = [
   { id: "n1", userId: "u1", type: "reminder", title: "Workshop in 1 hour", body: "Communication Skills — session 4 starts at 11:00 in Seminar Hall A.", at: ts(-1), read: false, link: "/programs" },
   { id: "n2", userId: "u1", type: "waitlist", title: "A seat opened for you!", body: "Careers in Medicine has a free seat. Accept within 2 hours or it goes to the next person.", at: ts(-0.5), read: false, link: "/events/c2", expiresAt: addHours(new Date(), 2).toISOString() },
-  { id: "n3", userId: "u1", type: "info", title: "Welcome to CampusSphere", body: "Verify your identity once to book spaces and equipment.", at: ts(-30), read: true, link: "/verify" },
+  { id: "n3", userId: "u1", type: "info", title: "Welcome to CampusSphare", body: "Verify your identity once to book spaces and equipment.", at: ts(-30), read: true, link: "/verify" },
   { id: "n4", userId: "u3", type: "approval", title: "Booking approved", body: "Chemistry Lab 2 is yours. See you there!", at: ts(-10), read: false },
   { id: "n5", userId: "u5", type: "overdue", title: "DSLR Kit overdue", body: "Please return the DSLR Kit to the Media Lab store today.", at: ts(-3), read: false },
   { id: "n6", userId: "u8", type: "info", title: "3 requests waiting", body: "New booking requests need your review.", at: ts(-2), read: false, link: "/approvals" },

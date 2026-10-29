@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { CalendarX, History, LogIn, LogOut, AlertTriangle, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { d } from "@/data/mock";
 import { Countdown, DemandBadge } from "@/components/contest";
 
 export const Route = createFileRoute("/bookings")({
-  head: () => ({ meta: [{ title: "My bookings — CampusSphere" }, { name: "description", content: "Track your requests, check in, return and see the full history." }, { property: "og:title", content: "My bookings — CampusSphere" }, { property: "og:description", content: "Track your space and equipment requests." }] }),
+  head: () => ({ meta: [{ title: "My bookings — CampusSphare" }, { name: "description", content: "Track your requests, check in, return and see the full history." }, { property: "og:title", content: "My bookings — CampusSphare" }, { property: "og:description", content: "Track your space and equipment requests." }] }),
   component: Bookings,
 });
 
@@ -78,3 +78,4 @@ function Bookings() {
     </div>
   );
 }
+

@@ -9,9 +9,9 @@ import type { Category } from "@/data/types";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "CampusSphere — Open campus spaces & free community programs" },
+      { title: "CampusSphare — Open campus spaces & free community programs" },
       { name: "description", content: "Book underused college labs, halls and equipment, and join free study, career, skill, health and government scheme programs." },
-      { property: "og:title", content: "CampusSphere — Our campus, open to everyone" },
+      { property: "og:title", content: "CampusSphare — Our campus, open to everyone" },
       { property: "og:description", content: "Book labs, halls and equipment. Join free community programs." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
