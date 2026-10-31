@@ -26,6 +26,7 @@ import {
   ShieldCheck,
   CheckCircle2,
   Users,
+  Ticket,
 } from "lucide-react";
 import { useApp, useMe } from "@/store/app";
 import { useAuthStore } from "@/store/authStore";
@@ -37,6 +38,7 @@ import { Button } from "@/components/ui/button";
 import { RoleSwitcher } from "@/components/RoleSwitcher";
 import { PendingRoleBanner } from "@/components/auth/PendingRoleBanner";
 import { DemoGuide } from "./DemoGuide";
+import { SeatBookingGuideModal } from "@/components/booking/SeatBookingGuideModal";
 
 export const ROLE_LABEL: Record<Role, string> = {
   user: "Student / Citizen",
@@ -366,8 +368,25 @@ export function AppShell({ children }: { children: ReactNode }) {
     }
   }, [activeRole, setRole]);
 
-  // Bare pages without header/sidebar
   const bare = path === "/" || path === "/login" || path === "/signup";
+
+  const isSeatBookingGuideOpen = useAuthStore((s) => s.isSeatBookingGuideOpen);
+  const openSeatBookingGuide = useAuthStore((s) => s.openSeatBookingGuide);
+
+  // Automatically trigger How to Book a Seat guide on user's first login
+  useEffect(() => {
+    if (!bare && currentUser && typeof window !== "undefined") {
+      const seen =
+        localStorage.getItem(`campussphere_seen_seat_guide_${currentUser.id}`) ||
+        localStorage.getItem("campussphere_seen_seat_guide_global");
+      if (!seen) {
+        const timer = setTimeout(() => {
+          openSeatBookingGuide();
+        }, 600);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [bare, currentUser?.id, openSeatBookingGuide]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -452,6 +471,19 @@ export function AppShell({ children }: { children: ReactNode }) {
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>Campus Spaces: Open</span>
             </div>
+
+            {/* Quick Action: How to Book Guide Trigger */}
+            {!bare && (
+              <button
+                type="button"
+                onClick={openSeatBookingGuide}
+                className="hidden lg:inline-flex items-center gap-1.5 h-9 rounded-xl bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800 px-3 text-xs font-bold text-indigo-700 dark:text-indigo-300 shadow-2xs transition-all active:scale-95 cursor-pointer"
+                title="View How to Book a Seat in 3 Taps"
+              >
+                <Ticket className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
+                <span>How to Book</span>
+              </button>
+            )}
 
             {/* Quick Action: New Request */}
             <Button
@@ -561,6 +593,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
 
       <DemoGuide />
+      <SeatBookingGuideModal />
     </div>
   );
 }

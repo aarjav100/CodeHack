@@ -16,6 +16,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { EmptyState, ListSkeleton, PageHeader, Timeline, useFakeLoad } from "@/components/shared";
 import { useApp, useMe } from "@/store/app";
+import { useAuthStore } from "@/store/authStore";
 import type { Booking } from "@/data/types";
 import { CinemaTicketCard } from "@/components/booking/CinemaTicketCard";
 import { toast } from "sonner";
@@ -42,6 +43,7 @@ function BookingsPage() {
   const cancel = useApp((s) => s.cancelBooking);
   const extendBooking = useApp((s) => s.extendBooking);
   const { acceptOffer, declineOffer } = useApp();
+  const openSeatBookingGuide = useAuthStore((s) => s.openSeatBookingGuide);
 
   const [tab, setTab] = useState("upcoming");
   const [selectedBookingForHistory, setSelectedBookingForHistory] = useState<Booking | null>(null);
@@ -81,13 +83,24 @@ function BookingsPage() {
           </p>
         </div>
 
-        <Link
-          to="/discover"
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-md transition-all active:scale-95 self-start sm:self-auto"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Book New Seat</span>
-        </Link>
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <button
+            type="button"
+            onClick={openSeatBookingGuide}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-bold rounded-xl border border-indigo-200 dark:border-indigo-800 shadow-2xs transition-all active:scale-95 cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <span>How to Book</span>
+          </button>
+
+          <Link
+            to="/discover"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-md transition-all active:scale-95"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Book New Seat</span>
+          </Link>
+        </div>
       </div>
 
       {/* Waiting List Urgent Offer Notification */}

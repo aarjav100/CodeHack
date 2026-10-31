@@ -24,24 +24,25 @@ export const DEMO_USER: Record<string, string> = {
 };
 
 const F = (a: number, b: number, c: number, s: number, r: number, p: number) => ({
-  lowUsage: a, waiting: b, purpose: c, skill: s, reliability: r, penalties: p,
+  capability: a, urgency: b, need: c, skill: s, reliability: r, penalties: p,
+  lowUsage: a, waiting: b, purpose: c,
 });
 
 export const users: User[] = [
-  { id: "u1", name: "Aarav Sharma", role: "user", email: "aarav.s@stxavier.edu.in", kind: "student", dept: "B.Sc. Physics", enrollment: "SXC22PHY041", verified: "none", skills: [], hours: 0, avatar: av("Aarav"), factors: F(90, 40, 75, 30, 85, 0) },
+  { id: "u1", name: "Aarav Sharma", role: "user", email: "aarav.s@stxavier.edu.in", kind: "student", dept: "B.Sc. Physics", enrollment: "SXC22PHY041", verified: "none", skills: [], hours: 0, avatar: av("Aarav"), factors: F(100, 100, 100, 100, 100, 0) },
   { id: "u2", name: "Meera Iyer", role: "user", email: "meera.iyer@gmail.com", kind: "citizen", verified: "verified", skills: ["Computer Basics"], hours: 0, avatar: av("Meera"), factors: F(70, 60, 80, 50, 90, 0) },
   { id: "u3", name: "Rohan Das", role: "user", email: "rohan.d@stxavier.edu.in", kind: "student", dept: "B.Tech ECE", enrollment: "SXC21ECE007", verified: "verified", skills: ["Lab Safety", "Electronics Basics"], hours: 4, avatar: av("Rohan"), factors: F(40, 30, 85, 90, 70, 10) },
   { id: "u4", name: "Fatima Khan", role: "user", email: "fatima.k@stxavier.edu.in", kind: "student", dept: "B.Sc. Chemistry", enrollment: "SXC23CHE019", verified: "pending", skills: ["Lab Safety"], hours: 0, avatar: av("Fatima"), factors: F(95, 70, 90, 60, 80, 0), priorityNeed: true },
   { id: "u5", name: "Kabir Singh", role: "user", email: "kabir.s@stxavier.edu.in", kind: "student", dept: "BMM Media", enrollment: "SXC22BMM033", verified: "verified", skills: ["Camera Handling"], hours: 2, avatar: av("Kabir"), factors: F(55, 20, 60, 80, 60, 25) },
-  { id: "u6", name: "Dr. Anil Mehta", role: "owner", email: "anil.mehta@stxavier.edu.in", kind: "staff", dept: "Chemistry (HoD)", verified: "verified", skills: [], hours: 0, avatar: av("Anil"), factors: F(50, 50, 50, 50, 50, 0) },
-  { id: "u7", name: "Prof. Sunita Rao", role: "owner", email: "sunita.rao@stxavier.edu.in", kind: "staff", dept: "Media & Engineering", verified: "verified", skills: [], hours: 0, avatar: av("Sunita"), factors: F(50, 50, 50, 50, 50, 0) },
-  { id: "u8", name: "Vikram Nair", role: "manager", email: "vikram.nair@stxavier.edu.in", kind: "staff", dept: "Events Office", verified: "verified", skills: [], hours: 0, avatar: av("Vikram"), factors: F(50, 50, 50, 50, 50, 0) },
-  { id: "u9", name: "Priya Menon", role: "manager", email: "priya.menon@stxavier.edu.in", kind: "staff", dept: "Lab Assistant", verified: "verified", skills: [], hours: 0, avatar: av("Priya"), factors: F(50, 50, 50, 50, 50, 0) },
-  { id: "u10", name: "Neha Joshi", role: "volunteer", email: "neha.j@stxavier.edu.in", kind: "student", dept: "M.Sc. Maths", verified: "verified", skills: ["Computer Basics"], hours: 46, avatar: av("Neha"), factors: F(60, 40, 70, 70, 95, 0) },
-  { id: "u11", name: "Arjun Patel", role: "volunteer", email: "arjun.p@gmail.com", kind: "citizen", verified: "verified", skills: [], hours: 28, avatar: av("Arjun"), factors: F(60, 40, 70, 60, 90, 0) },
-  { id: "u12", name: "Dr. Kavita Bose", role: "partner", email: "kavita@sevahospital.org", kind: "citizen", dept: "Seva Community Hospital", verified: "verified", skills: [], hours: 12, avatar: av("Kavita"), factors: F(50, 50, 50, 50, 50, 0) },
-  { id: "u13", name: "Sameer Qureshi", role: "partner", email: "sameer@brightbyte.io", kind: "citizen", dept: "BrightByte Labs", verified: "verified", skills: [], hours: 6, avatar: av("Sameer"), factors: F(50, 50, 50, 50, 50, 0) },
-  { id: "u14", name: "Lakshmi Pillai", role: "admin", email: "registrar@stxavier.edu.in", kind: "staff", dept: "Administration", verified: "verified", skills: [], hours: 0, avatar: av("Lakshmi"), factors: F(50, 50, 50, 50, 50, 0) },
+  { id: "u6", name: "Dr. Anil Mehta", role: "owner", email: "anil.mehta@stxavier.edu.in", kind: "staff", dept: "Chemistry (HoD)", verified: "verified", skills: [], hours: 0, avatar: av("Anil"), factors: F(100, 100, 100, 100, 100, 0) },
+  { id: "u7", name: "Prof. Sunita Rao", role: "owner", email: "sunita.rao@stxavier.edu.in", kind: "staff", dept: "Media & Engineering", verified: "verified", skills: [], hours: 0, avatar: av("Sunita"), factors: F(100, 100, 100, 100, 100, 0) },
+  { id: "u8", name: "Vikram Nair", role: "manager", email: "vikram.nair@stxavier.edu.in", kind: "staff", dept: "Events Office", verified: "verified", skills: [], hours: 0, avatar: av("Vikram"), factors: F(100, 100, 100, 100, 100, 0) },
+  { id: "u9", name: "Priya Menon", role: "manager", email: "priya.menon@stxavier.edu.in", kind: "staff", dept: "Lab Assistant", verified: "verified", skills: [], hours: 0, avatar: av("Priya"), factors: F(100, 100, 100, 100, 100, 0) },
+  { id: "u10", name: "Neha Joshi", role: "volunteer", email: "neha.j@stxavier.edu.in", kind: "student", dept: "M.Sc. Maths", verified: "verified", skills: ["Computer Basics"], hours: 46, avatar: av("Neha"), factors: F(100, 100, 100, 100, 100, 0) },
+  { id: "u11", name: "Arjun Patel", role: "volunteer", email: "arjun.p@gmail.com", kind: "citizen", verified: "verified", skills: [], hours: 28, avatar: av("Arjun"), factors: F(80, 80, 80, 70, 90, 0) },
+  { id: "u12", name: "Dr. Kavita Bose", role: "partner", email: "kavita@sevahospital.org", kind: "citizen", dept: "Seva Community Hospital", verified: "verified", skills: [], hours: 12, avatar: av("Kavita"), factors: F(100, 100, 100, 100, 100, 0) },
+  { id: "u13", name: "Sameer Qureshi", role: "partner", email: "sameer@brightbyte.io", kind: "citizen", dept: "BrightByte Labs", verified: "verified", skills: [], hours: 6, avatar: av("Sameer"), factors: F(100, 100, 100, 100, 100, 0) },
+  { id: "u14", name: "Lakshmi Pillai", role: "admin", email: "registrar@stxavier.edu.in", kind: "staff", dept: "Administration", verified: "verified", skills: [], hours: 0, avatar: av("Lakshmi"), factors: F(100, 100, 100, 100, 100, 0) },
   { id: "u16", name: "Asha Verma", role: "user", email: "asha.v@stxavier.edu.in", kind: "student", dept: "Computer Science", enrollment: "SXC22CSE014", verified: "verified", skills: ["Computer Basics"], hours: 0, avatar: av("Asha"), factors: F(95, 60, 90, 70, 90, 0) },
   { id: "u17", name: "Ravi Kulkarni", role: "user", email: "ravi.k@stxavier.edu.in", kind: "student", dept: "Mechanical", enrollment: "SXC21MEC022", verified: "verified", skills: ["Lab Safety"], hours: 0, avatar: av("Ravi"), factors: F(25, 30, 60, 75, 60, 8) },
   { id: "u15", name: "Ishaan Gupta", role: "user", email: "ishaan.g@stxavier.edu.in", kind: "student", dept: "B.Com", enrollment: "SXC23COM052", verified: "verified", skills: ["Computer Basics"], hours: 0, avatar: av("Ishaan"), factors: F(80, 55, 65, 50, 75, 5) },
@@ -538,6 +539,7 @@ export const audit: AuditEntry[] = [
 ];
 
 export const defaultWeights: Weights = {
+  capability: 30, urgency: 20, need: 20,
   lowUsage: 30, waiting: 20, purpose: 20, skill: 15, reliability: 15, penalties: 100, maxStudyPerWeek: 3, maxBookingHours: 3, maxBookingsPerWeek: 3,
 };
 

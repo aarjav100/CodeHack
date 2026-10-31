@@ -16,12 +16,14 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useApp } from "@/store/app";
+import { useAuthStore } from "@/store/authStore";
 import type { Role } from "@/data/types";
 
 export function DemoGuide() {
   const [open, setOpen] = useState(false);
   const setRole = useApp((s) => s.setRole);
   const { seedDemoContest, fastForward } = useApp();
+  const openSeatBookingGuide = useAuthStore((s) => s.openSeatBookingGuide);
   const nav = useNavigate();
 
   const handleStartFlow = (path: string) => {
@@ -56,6 +58,28 @@ export function DemoGuide() {
           <div className="mt-5 space-y-6 px-1 pb-6">
             {/* Quick 1-Tap Launcher Buttons */}
             <div className="space-y-2.5">
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  openSeatBookingGuide();
+                }}
+                className="w-full p-3.5 rounded-2xl bg-purple-50 hover:bg-purple-100 dark:bg-purple-950/60 dark:hover:bg-purple-900/60 border border-purple-200 dark:border-purple-800 text-left transition-all flex items-center justify-between group shadow-xs cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                    <Ticket className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                      How to Book a Seat Guide
+                    </div>
+                    <div className="text-[11px] text-slate-500">
+                      4-step walkthrough shown on first login
+                    </div>
+                  </div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-purple-600 group-hover:translate-x-1 transition-transform" />
+              </button>
               <button
                 onClick={() => handleStartFlow("/book/comp-lab-4")}
                 className="w-full p-3.5 rounded-2xl bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800 text-left transition-all flex items-center justify-between group shadow-xs"

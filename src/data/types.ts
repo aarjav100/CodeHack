@@ -11,12 +11,15 @@ export type BookingStatus =
 export type Category = "study" | "career" | "workshop" | "health" | "scheme";
 
 export interface FairFactors {
-  lowUsage: number;
-  waiting: number;
-  purpose: number;
+  capability: number;
+  urgency: number;
+  need: number;
   skill: number;
   reliability: number;
   penalties: number;
+  lowUsage?: number;
+  waiting?: number;
+  purpose?: number;
 }
 
 export interface User {
@@ -350,6 +353,9 @@ export interface AuditEntry {
 }
 
 export interface Weights {
+  capability?: number;
+  urgency?: number;
+  need?: number;
   lowUsage: number;
   waiting: number;
   purpose: number;

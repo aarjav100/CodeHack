@@ -109,6 +109,7 @@ function Profile() {
   const me = useMe();
   const resources = useApp((s) => s.resources);
   const weights = useApp((s) => s.weights);
+  const resetFairScore = useApp((s) => s.resetFairScore);
   const setPriority = useApp((s) => s.setPriority);
   const setRole = useApp((s) => s.setRole);
   const logout = useApp((s) => s.logout);
@@ -284,38 +285,58 @@ function Profile() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Fair Allocation Model</span>
-                  <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-blue-100 text-blue-700">Top 4% on Campus</span>
+                  <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${score >= 90 ? "bg-emerald-100 text-emerald-800" : "bg-blue-100 text-blue-700"}`}>
+                    {score === 100 ? "Pristine 100% Standing" : score >= 80 ? "Sovereign Tier" : "Needs Punctual Recovery"}
+                  </span>
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 tracking-tight">Your Fair-Share Score: {score} / 100</h3>
-                <p className="text-xs text-slate-500 mt-0.5">Earn priority scheduling by maintaining equipment and sharing campus spaces responsibly.</p>
+                <p className="text-xs text-slate-500 mt-0.5">Calculated from user capability, urgency, need, skills, and on-time checkouts.</p>
               </div>
               <div className="text-right pl-3 shrink-0">
                 <div className="text-2xl font-extrabold text-blue-600 tracking-tight">
                   {score}<span className="text-xs font-normal text-slate-400">/100</span>
                 </div>
-                <span className="text-xs font-semibold text-emerald-600 flex items-center justify-end gap-0.5">
-                  <span className="material-symbols-outlined text-[14px]">arrow_upward</span> +3.2 pts this sprint
-                </span>
+                {me.factors.penalties ? (
+                  <span className="text-xs font-semibold text-rose-600 flex items-center justify-end gap-0.5">
+                    −{me.factors.penalties} pts late penalty
+                  </span>
+                ) : (
+                  <span className="text-xs font-semibold text-emerald-600 flex items-center justify-end gap-0.5">
+                    <span className="material-symbols-outlined text-[14px]">verified</span> 100% On-Time Record
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Score Progress Visualizer Bar */}
             <div className="my-4 p-3.5 bg-slate-50 border border-slate-100 rounded-xl space-y-2">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-slate-700">Current Standing: Sovereign Tier</span>
-                <span className="font-medium text-blue-600">7 points to Master Fellow (Tier 0)</span>
+                <span className="font-semibold text-slate-700">
+                  {me.factors.penalties ? `Late Checkout Penalty: -${me.factors.penalties} pts active` : "Standing: Maximum Initial 100% Baseline"}
+                </span>
+                {me.factors.penalties ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      resetFairScore(me.id);
+                      toast.success("Fair score reset to initial 100% baseline!");
+                    }}
+                    className="text-xs font-bold text-indigo-600 hover:underline cursor-pointer"
+                  >
+                    Reset to 100%
+                  </button>
+                ) : (
+                  <span className="font-medium text-emerald-600">Zero Infractions</span>
+                )}
               </div>
               <div className="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden flex p-0.5">
-                <div className="bg-blue-600 h-full rounded-l-full" style={{ width: "36%" }}></div>
-                <div className="bg-emerald-500 h-full" style={{ width: "28%" }}></div>
-                <div className="bg-teal-400 h-full" style={{ width: "24%" }}></div>
-                <div className="bg-indigo-400 h-full rounded-r-full" style={{ width: "12%" }}></div>
+                <div className="bg-blue-600 h-full rounded-full transition-all duration-500" style={{ width: `${score}%` }}></div>
               </div>
               <div className="flex justify-between items-center text-[11px] text-slate-400 pt-0.5">
-                <span>Standard (40)</span>
-                <span>Active (65)</span>
+                <span>Standard (50)</span>
+                <span>Active (75)</span>
                 <span className="text-blue-600 font-bold">You ({score})</span>
-                <span>Master Fellow (95)</span>
+                <span>Pristine (100)</span>
               </div>
             </div>
 

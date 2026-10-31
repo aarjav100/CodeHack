@@ -18,6 +18,9 @@ export interface AuthState {
   activeRole: RoleId;
   isContinueAsOpen: boolean;
   pendingLoginUser: AuthUser | null;
+  isSeatBookingGuideOpen: boolean;
+  openSeatBookingGuide: () => void;
+  closeSeatBookingGuide: (dontShowAgain?: boolean) => void;
 
   // Actions
   signUp: (payload: {
@@ -185,6 +188,18 @@ export const useAuthStore = create<AuthState>()(
       activeRole: "student",
       isContinueAsOpen: false,
       pendingLoginUser: null,
+      isSeatBookingGuideOpen: false,
+      openSeatBookingGuide: () => set({ isSeatBookingGuideOpen: true }),
+      closeSeatBookingGuide: (dontShowAgain = true) => {
+        const cur = get().currentUser;
+        if (cur && typeof window !== "undefined" && dontShowAgain) {
+          try {
+            localStorage.setItem(`campussphere_seen_seat_guide_${cur.id}`, "true");
+            localStorage.setItem("campussphere_seen_seat_guide_global", "true");
+          } catch {}
+        }
+        set({ isSeatBookingGuideOpen: false });
+      },
 
       signUp: ({ name, email, password, selectedRoles, startAs, detailsMap = {} }) => {
         const users = get().users;
@@ -249,6 +264,7 @@ export const useAuthStore = create<AuthState>()(
           users: updatedUsers,
           currentUser: newUser,
           activeRole: resolvedActiveRole,
+          isSeatBookingGuideOpen: true,
         });
 
         return {
@@ -302,12 +318,18 @@ export const useAuthStore = create<AuthState>()(
 
         const updatedUsers = users.map((u) => (u.id === user.id ? updatedUser : u));
 
+        const hasSeenGuide = typeof window !== "undefined" && (
+          localStorage.getItem(`campussphere_seen_seat_guide_${user.id}`) ||
+          localStorage.getItem("campussphere_seen_seat_guide_global")
+        );
+
         set({
           users: updatedUsers,
           currentUser: updatedUser,
           activeRole: preferredRole,
           isContinueAsOpen: false,
           pendingLoginUser: null,
+          isSeatBookingGuideOpen: !hasSeenGuide,
         });
 
         return {
@@ -330,12 +352,18 @@ export const useAuthStore = create<AuthState>()(
 
         const updatedUsers = get().users.map((u) => (u.id === pending.id ? updated : u));
 
+        const hasSeenGuide = typeof window !== "undefined" && (
+          localStorage.getItem(`campussphere_seen_seat_guide_${pending.id}`) ||
+          localStorage.getItem("campussphere_seen_seat_guide_global")
+        );
+
         set({
           users: updatedUsers,
           currentUser: updated,
           activeRole: roleId,
           isContinueAsOpen: false,
           pendingLoginUser: null,
+          isSeatBookingGuideOpen: !hasSeenGuide,
         });
       },
 

@@ -227,22 +227,101 @@ export function FairGauge({ factors, size = 160 }: { factors: FairFactors; size?
   );
 }
 
-export const FACTOR_LABELS: Record<keyof FairFactors, { label: string; help: string }> = {
+export const FACTOR_LABELS: Record<string, { label: string; help: string }> = {
+  capability: { label: "User Capability", help: "Demonstrated user capacity, track record and fair bandwidth." },
+  urgency: { label: "Urgency Level", help: "Time-sensitivity of current project, deadline or emergency need." },
+  need: { label: "Priority Need", help: "Academic requirement, capstone research or verified community need." },
+  skill: { label: "Skills & Training", help: "Verified safety badges, lab certifications and proficiency badges." },
+  reliability: { label: "On-Time Reliability", help: "Punctuality record for timely check-in and checkout." },
+  penalties: { label: "Late Checkout Penalties", help: "Deductions for returning past scheduled slot end time." },
   lowUsage: { label: "Low recent usage", help: "You haven't used many shared resources lately." },
   waiting: { label: "Waiting time", help: "How long you've been waiting or were waitlisted before." },
   purpose: { label: "Purpose", help: "Learning, community or coursework purposes score higher." },
-  skill: { label: "Skill match", help: "Badges that show you can use the resource safely." },
-  reliability: { label: "Reliability", help: "On-time check-ins and returns." },
-  penalties: { label: "Penalties", help: "Late returns, no-shows or damage (subtracted)." },
 };
 
 export function FactorBars({ factors }: { factors: FairFactors }) {
+  const displayFactors = [
+    {
+      key: "capability",
+      label: "User Capability",
+      value: factors.capability ?? factors.lowUsage ?? 100,
+      isPenalty: false,
+      desc: "User capacity & bandwidth",
+    },
+    {
+      key: "urgency",
+      label: "Urgency Level",
+      value: factors.urgency ?? factors.waiting ?? 100,
+      isPenalty: false,
+      desc: "Time sensitivity of booking",
+    },
+    {
+      key: "need",
+      label: "Priority Need",
+      value: factors.need ?? factors.purpose ?? 100,
+      isPenalty: false,
+      desc: "Academic & project need",
+    },
+    {
+      key: "skill",
+      label: "Skills & Badges",
+      value: factors.skill ?? 100,
+      isPenalty: false,
+      desc: "Verified lab certifications",
+    },
+    {
+      key: "reliability",
+      label: "On-Time Reliability",
+      value: factors.reliability ?? 100,
+      isPenalty: false,
+      desc: "Punctual check-in & checkout history",
+    },
+    {
+      key: "penalties",
+      label: "Late Checkout Penalties",
+      value: factors.penalties ?? 0,
+      isPenalty: true,
+      desc: "Deductions from delayed returns",
+    },
+  ];
+
   return (
-    <ul className="space-y-2.5">
-      {(Object.keys(FACTOR_LABELS) as (keyof FairFactors)[]).map((k) => (
-        <li key={k}>
-          <div className="flex justify-between text-sm"><span>{FACTOR_LABELS[k].label}</span><span className="font-medium">{k === "penalties" ? `−${factors[k]}` : factors[k]}</span></div>
-          <div className="mt-1 h-2 rounded-full bg-muted"><div className={cn("h-2 rounded-full", k === "penalties" ? "bg-st-rejected" : "bg-primary")} style={{ width: `${factors[k]}%` }} /></div>
+    <ul className="space-y-3">
+      {displayFactors.map((item) => (
+        <li key={item.key}>
+          <div className="flex justify-between items-center text-sm">
+            <div>
+              <span className="font-semibold text-slate-800 dark:text-slate-200">{item.label}</span>
+              <span className="text-slate-400 block text-[11px]">{item.desc}</span>
+            </div>
+            <span
+              className={cn(
+                "font-bold text-xs px-2 py-0.5 rounded-md",
+                item.isPenalty
+                  ? item.value > 0
+                    ? "bg-rose-50 text-rose-700 border border-rose-200"
+                    : "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                  : "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+              )}
+            >
+              {item.isPenalty ? (item.value > 0 ? `−${item.value} pts` : "0 (Clean)") : `${item.value}%`}
+            </span>
+          </div>
+          <div className="mt-1.5 h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+            <div
+              className={cn(
+                "h-full rounded-full transition-all duration-500",
+                item.isPenalty
+                  ? "bg-rose-500"
+                  : item.value >= 80
+                  ? "bg-blue-600"
+                  : item.value >= 50
+                  ? "bg-amber-500"
+                  : "bg-rose-500"
+              )}
+              style={{ width: `${Math.min(100, item.value)}%` }}
+            />
+          </div>
         </li>
       ))}
     </ul>

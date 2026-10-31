@@ -1,11 +1,28 @@
 import type { Booking, FairFactors, Requirement, Resource, User, Weights } from "@/data/types";
 
-export function fairScore(f: FairFactors, w: Weights) {
-  const total = w.lowUsage + w.waiting + w.purpose + w.skill + w.reliability || 1;
-  const raw =
-    (f.lowUsage * w.lowUsage + f.waiting * w.waiting + f.purpose * w.purpose + f.skill * w.skill + f.reliability * w.reliability) / total;
-  const penalty = (f.penalties * w.penalties) / 100;
-  return Math.max(0, Math.min(100, Math.round(raw - penalty)));
+export function fairScore(f: FairFactors, w: Weights, overdueMinutes = 0) {
+  // Evaluates capability, urgency, need, skills, and reliability
+  const cap = f.capability ?? f.lowUsage ?? 100;
+  const urg = f.urgency ?? f.waiting ?? 100;
+  const need = f.need ?? f.purpose ?? 100;
+  const skill = f.skill ?? 100;
+  const reliability = f.reliability ?? 100;
+
+  const wCap = w.capability ?? w.lowUsage ?? 20;
+  const wUrg = w.urgency ?? w.waiting ?? 20;
+  const wNeed = w.need ?? w.purpose ?? 20;
+  const wSkill = w.skill ?? 15;
+  const wRel = w.reliability ?? 15;
+
+  const total = wCap + wUrg + wNeed + wSkill + wRel || 1;
+  const raw = (cap * wCap + urg * wUrg + need * wNeed + skill * wSkill + reliability * wRel) / total;
+
+  // Penalties from late checkouts and infractions
+  const recordedPenalty = ((f.penalties || 0) * (w.penalties || 100)) / 100;
+  const liveOverduePenalty = overdueMinutes > 5 ? Math.min(50, Math.ceil((overdueMinutes - 5) / 15) * 5) : 0;
+  const finalPenalty = recordedPenalty + liveOverduePenalty;
+
+  return Math.max(0, Math.min(100, Math.round(raw - finalPenalty)));
 }
 
 export function checkReq(req: Requirement, user: User): boolean {

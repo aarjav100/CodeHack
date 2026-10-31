@@ -12,13 +12,30 @@ export const PURPOSES = ["Course project", "Club event", "Exam preparation", "Re
 
 /** Points contributed by each factor (out of the weight), penalties negative. */
 export function factorPoints(f: FairFactors, w: Weights) {
+  const cap = f.capability ?? f.lowUsage ?? 100;
+  const urg = f.urgency ?? f.waiting ?? 100;
+  const need = f.need ?? f.purpose ?? 100;
+  const skill = f.skill ?? 100;
+  const reliability = f.reliability ?? 100;
+  const penalties = f.penalties ?? 0;
+
+  const wCap = w.capability ?? w.lowUsage ?? 30;
+  const wUrg = w.urgency ?? w.waiting ?? 20;
+  const wNeed = w.need ?? w.purpose ?? 20;
+  const wSkill = w.skill ?? 15;
+  const wRel = w.reliability ?? 15;
+  const wPen = w.penalties ?? 100;
+
   return {
-    lowUsage: (f.lowUsage * w.lowUsage) / 100,
-    waiting: (f.waiting * w.waiting) / 100,
-    purpose: (f.purpose * w.purpose) / 100,
-    skill: (f.skill * w.skill) / 100,
-    reliability: (f.reliability * w.reliability) / 100,
-    penalties: -(f.penalties * w.penalties) / 100,
+    capability: (cap * wCap) / 100,
+    urgency: (urg * wUrg) / 100,
+    need: (need * wNeed) / 100,
+    skill: (skill * wSkill) / 100,
+    reliability: (reliability * wRel) / 100,
+    penalties: -(penalties * wPen) / 100,
+    lowUsage: (cap * wCap) / 100,
+    waiting: (urg * wUrg) / 100,
+    purpose: (need * wNeed) / 100,
   };
 }
 
@@ -54,13 +71,16 @@ export function displayName(u: User | undefined, anonymous?: boolean) {
   return `${u.name.split(" ")[0]} · ${u.dept ?? (u.kind === "citizen" ? "Community" : "Staff")}`;
 }
 
-const LOSS_TEXT: Record<keyof FairFactors, string> = {
+const LOSS_TEXT: Partial<Record<keyof FairFactors, string>> = {
+  capability: "your user capability/bandwidth rating is lower",
+  urgency: "your request has a lower urgency level",
+  need: "another applicant demonstrated higher priority academic or community need",
+  skill: "your verified skill badges match this resource less closely",
+  reliability: "your on-time checkout and return history is lower",
+  penalties: "of late checkout deductions or manager penalties",
   lowUsage: "you used shared resources a lot in the last 30 days",
   waiting: "you have waited less than others recently",
   purpose: "your purpose scored lower on learning/community need",
-  skill: "your skill badges match this resource less closely",
-  reliability: "your on-time check-in and return history is lower",
-  penalties: "of a manager-confirmed penalty (e.g. a late return)",
 };
 
 /** Step-by-step plain-language explanation for one applicant. */

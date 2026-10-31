@@ -37,7 +37,21 @@ const getInitialUsers = (): User[] => {
       if (stored) {
         const custom: User[] = JSON.parse(stored);
         const customIds = new Set(custom.map((u) => u.id));
-        return [...custom, ...M.users.filter((u) => !customIds.has(u.id))];
+        const normalizedCustom = custom.map((u) => ({
+          ...u,
+          factors: {
+            capability: u.factors?.capability ?? u.factors?.lowUsage ?? 100,
+            urgency: u.factors?.urgency ?? u.factors?.waiting ?? 100,
+            need: u.factors?.need ?? u.factors?.purpose ?? 100,
+            skill: u.factors?.skill ?? 100,
+            reliability: u.factors?.reliability ?? 100,
+            penalties: u.factors?.penalties ?? 0,
+            lowUsage: u.factors?.lowUsage ?? u.factors?.capability ?? 100,
+            waiting: u.factors?.waiting ?? u.factors?.urgency ?? 100,
+            purpose: u.factors?.purpose ?? u.factors?.need ?? 100,
+          },
+        }));
+        return [...normalizedCustom, ...M.users.filter((u) => !customIds.has(u.id))];
       }
     } catch {}
   }
@@ -109,7 +123,9 @@ interface State {
   verify: (status: "verified" | "pending", info: { email?: string; enrollment?: string }) => void;
   adminVerify: (userId: string, ok: boolean) => void;
   checkIn: (bookingId: string, items: ConditionItem[], notes: string, photos: string[]) => void;
-  returnItem: (bookingId: string, items: ConditionItem[], notes: string, photos: string[]) => void;
+  returnItem: (bookingId: string, items: ConditionItem[], notes: string, photos: string[], simulatedLateMinutes?: number) => void;
+  penalizeLateCheckout: (userId: string, penaltyPoints: number, reason?: string) => void;
+  resetFairScore: (userId?: string) => void;
   reportIncident: (i: Omit<Incident, "id" | "status" | "at" | "reporterId">) => void;
   reviewIncident: (id: string, status: Incident["status"], resolution: string) => void;
 
@@ -269,7 +285,17 @@ export const useApp = create<State>((set, get) => ({
       skills: [],
       hours: 0,
       avatar: `https://api.dicebear.com/9.x/notionists/svg?seed=${nameSeed}&backgroundColor=e0e7ff,ccfbf1,fef3c7`,
-      factors: { lowUsage: 90, waiting: 50, purpose: 80, skill: 50, reliability: 85, penalties: 0 },
+      factors: {
+        capability: 100,
+        urgency: 100,
+        need: 100,
+        skill: 100,
+        reliability: 100,
+        penalties: 0,
+        lowUsage: 100,
+        waiting: 100,
+        purpose: 100,
+      },
     };
     const nextUsers = [newUser, ...get().users];
     set({
@@ -554,9 +580,116 @@ export const useApp = create<State>((set, get) => ({
     set((s) => ({ bookings: s.bookings.map((x) => (x.id === bid ? { ...x, status: "active", checkin: { items, notes, photos, at: now() }, timeline: [...x.timeline, { at: now(), actor: "Applicant", text: `Checked in (${items.filter((i) => !i.ok).length} issues noted)` }] } : x)) }));
     get().log("booking.checkin", bid, "Condition checklist recorded");
   },
-  returnItem: (bid, items, notes, photos) => {
-    set((s) => ({ bookings: s.bookings.map((x) => (x.id === bid ? { ...x, status: "completed", ret: { items, notes, photos, at: now() }, timeline: [...x.timeline, { at: now(), actor: "Applicant", text: "Returned and checked out" }] } : x)) }));
-    get().log("booking.return", bid, "Return checklist recorded");
+  penalizeLateCheckout: (userId, penaltyPoints, reason) => {
+    const s = get();
+    const user = s.users.find((u) => u.id === userId);
+    if (!user) return;
+    const oldScore = fairScore(user.factors, s.weights);
+    const updatedUsers = s.users.map((u) => {
+      if (u.id !== userId) return u;
+      const currentPen = u.factors.penalties || 0;
+      const currentRel = u.factors.reliability ?? 100;
+      return {
+        ...u,
+        factors: {
+          ...u.factors,
+          penalties: currentPen + penaltyPoints,
+          reliability: Math.max(20, currentRel - Math.round(penaltyPoints * 0.4)),
+        },
+      };
+    });
+    set({ users: updatedUsers });
+    const nextUser = updatedUsers.find((u) => u.id === userId)!;
+    const newScore = fairScore(nextUser.factors, s.weights);
+    const detail = reason ?? `${penaltyPoints} penalty points for late checkout`;
+    s.log("fair_score.late_penalty", user.name, `${detail} (Score: ${oldScore}% → ${newScore}%)`);
+    s.notify(userId, {
+      type: "info",
+      title: "Fair-Share Score Decreased",
+      body: `Late checkout recorded (-${penaltyPoints} pts). Your Fair-Share score decreased from ${oldScore}% to ${newScore}%. Punctual checkouts protect access for all students.`,
+      link: "/fair-share",
+    });
+    if (typeof window !== "undefined") {
+      try {
+        const custom = updatedUsers.filter((u) => !M.users.some((mu) => mu.id === u.id));
+        localStorage.setItem("campussphere_custom_users", JSON.stringify(custom));
+      } catch {}
+    }
+  },
+
+  resetFairScore: (userId) => {
+    const s = get();
+    const targetId = userId ?? s.me().id;
+    const user = s.users.find((u) => u.id === targetId);
+    const updatedUsers = s.users.map((u) => {
+      if (u.id !== targetId) return u;
+      return {
+        ...u,
+        factors: {
+          capability: 100,
+          urgency: 100,
+          need: 100,
+          skill: 100,
+          reliability: 100,
+          penalties: 0,
+          lowUsage: 100,
+          waiting: 100,
+          purpose: 100,
+        },
+      };
+    });
+    set({ users: updatedUsers });
+    s.log("fair_score.reset", user?.name ?? targetId, "Fair-Share score reset to initial 100% baseline");
+    if (typeof window !== "undefined") {
+      try {
+        const custom = updatedUsers.filter((u) => !M.users.some((mu) => mu.id === u.id));
+        localStorage.setItem("campussphere_custom_users", JSON.stringify(custom));
+      } catch {}
+    }
+  },
+
+  returnItem: (bid, items, notes, photos, simulatedLateMinutes) => {
+    const s = get();
+    const b = s.bookings.find((x) => x.id === bid);
+    let lateMinutes = simulatedLateMinutes ?? 0;
+    if (b && simulatedLateMinutes === undefined) {
+      try {
+        const [sh, sm] = b.start.split(":").map(Number);
+        const endMin = sh * 60 + sm + b.duration * 60;
+        const nowTime = new Date();
+        const curDate = `${nowTime.getFullYear()}-${String(nowTime.getMonth() + 1).padStart(2, "0")}-${String(nowTime.getDate()).padStart(2, "0")}`;
+        if (b.date === curDate) {
+          const currentMin = nowTime.getHours() * 60 + nowTime.getMinutes();
+          if (currentMin > endMin + 5) {
+            lateMinutes = currentMin - endMin;
+          }
+        }
+      } catch {}
+    }
+
+    const penaltyPoints = lateMinutes > 0 ? Math.min(50, Math.max(5, Math.ceil(lateMinutes / 15) * 5)) : 0;
+    const timelineText = lateMinutes > 0
+      ? `Returned and checked out (${lateMinutes}m late, -${penaltyPoints} pts Fair Score penalty)`
+      : "Returned and checked out on time (100% clean return)";
+
+    set((state) => ({
+      bookings: state.bookings.map((x) =>
+        x.id === bid
+          ? {
+              ...x,
+              status: "completed",
+              ret: { items, notes, photos, at: now() },
+              timeline: [...x.timeline, { at: now(), actor: "Applicant", text: timelineText }],
+            }
+          : x
+      ),
+    }));
+
+    get().log("booking.return", bid, timelineText);
+
+    if (b && penaltyPoints > 0) {
+      get().penalizeLateCheckout(b.userId, penaltyPoints, `${lateMinutes}m late checkout`);
+    }
   },
   reportIncident: (i) => {
     const me = get().me();
