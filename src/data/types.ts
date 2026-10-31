@@ -43,6 +43,42 @@ export interface Requirement {
   skill?: string;
 }
 
+export type BookingMode = "seat" | "seats" | "venue" | "whole_venue";
+
+export interface SeatItem {
+  id: string; // e.g. "C4"
+  row: string; // "C"
+  col: number; // 4
+  label?: string; // "PC-C4" or "Printer 4" or "Bench 8"
+  kind?: "seat" | "bench" | "printer" | "gap";
+  trainingReq?: string; // e.g. "3D Printer Safety"
+}
+
+export interface SeatLayout {
+  rows: number;
+  cols: number;
+  screenLabel?: string; // "Whiteboard / Main Entrance"
+  aisles?: number[]; // column indices after which an aisle gap exists
+  seats: SeatItem[];
+  template?: "comp-lab-6x5" | "bench-2x6" | "study-10x6" | "custom";
+}
+
+export interface SlotDefinition {
+  id: string;
+  start: string; // "09:00"
+  end: string;   // "11:00"
+  label: string; // "09:00 - 11:00"
+}
+
+export type SeatState =
+  | "available"
+  | "booked"
+  | "requested"
+  | "selected"
+  | "maintenance"
+  | "locked"
+  | "event_reserved";
+
 export interface Resource {
   id: string;
   name: string;
@@ -62,6 +98,13 @@ export interface Resource {
   anonymous?: boolean;
   firstComeIfAlone?: boolean;
   maintenance?: boolean;
+
+  // Cinema & Show-time Booking Mode Attributes
+  bookingMode: BookingMode; // "seat" or "venue"
+  seatLayout?: SeatLayout;
+  slots?: SlotDefinition[];
+  maxSeatsPerBooking?: number;
+  instantConfirm?: boolean;
 }
 
 export interface TimelineEvent {
@@ -98,6 +141,16 @@ export interface Booking {
   checkin?: { items: ConditionItem[]; notes: string; photos: string[]; at: string };
   ret?: { items: ConditionItem[]; notes: string; photos: string[]; at: string };
   timeline: TimelineEvent[];
+
+  // Mode-specific & Cinema Ticket attributes
+  bookingMode?: BookingMode;
+  seats?: string[]; // Selected seat IDs (e.g. ["C4"] or ["A1", "A2"])
+  isWholeLab?: boolean;
+  groupSize?: number;
+  eventName?: string;
+  expectedAttendees?: number;
+  ticketCode?: string; // Cinema-ticket barcode format: e.g. "TKT-CS4-C4-7821"
+  extendedHours?: number;
 }
 
 export interface Incident {

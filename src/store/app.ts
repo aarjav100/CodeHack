@@ -143,6 +143,31 @@ interface State {
   completeShift: (id: string) => void;
   setWeights: (w: Partial<Weights>) => void;
   setUserRole: (uid: string, role: Role) => void;
+
+  bookCinemaSeat: (data: {
+    resourceId: string;
+    date: string;
+    slotId: string;
+    seatIds: string[];
+    purpose?: string;
+    purposeCategory?: string;
+    isWholeLab?: boolean;
+    groupSize?: number;
+  }) => { booking: Booking; isInstant: boolean };
+
+  bookCinemaVenue: (data: {
+    resourceId: string;
+    date: string;
+    start: string;
+    end: string;
+    eventName: string;
+    expectedAttendees: number;
+    purposeCategory: string;
+    notes?: string;
+  }) => { booking: Booking; isInstant: boolean };
+
+  extendBooking: (bookingId: string, hours: number) => void;
+  completeTraining: (skillName: string) => void;
 }
 
 export const useApp = create<State>((set, get) => ({
@@ -699,6 +724,169 @@ export const useApp = create<State>((set, get) => ({
   setUserRole: (uid, role) => {
     set((s) => ({ users: s.users.map((u) => (u.id === uid ? { ...u, role } : u)) }));
     get().log("user.role", uid, `Role set to ${role}`);
+  },
+
+  bookCinemaSeat: (data) => {
+    const s = get();
+    const me = s.me();
+    const res = s.resources.find((r) => r.id === data.resourceId)!;
+    const bid = id("b");
+    const at = now();
+    
+    // Find slot definition
+    const slot = res.slots?.find((sl) => sl.id === data.slotId) || { start: "11:00", end: "13:00", duration: 2, label: "11:00 - 13:00" };
+    
+    // Check competing requests on these seats
+    const competing = s.bookings.filter(
+      (b) => b.resourceId === data.resourceId && b.date === data.date && b.start === slot.start &&
+      (b.status === "pending" || b.status === "waitlisted") &&
+      b.seats?.some((st) => data.seatIds.includes(st))
+    );
+
+    const isInstant = Boolean(res.instantConfirm && competing.length === 0);
+    const status = isInstant ? "approved" : "pending";
+    const ticketCode = `CS-${data.resourceId.slice(0, 4).toUpperCase()}-${data.seatIds[0] || "ST"}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    const newBooking: Booking = {
+      id: bid,
+      resourceId: data.resourceId,
+      userId: me.id,
+      date: data.date,
+      start: slot.start,
+      duration: slot.duration,
+      purpose: data.purpose || `Seat Booking for ${data.seatIds.join(", ")}`,
+      purposeCategory: data.purposeCategory || "Study & Research",
+      attachments: [],
+      status,
+      recommendation: "approve",
+      createdAt: at,
+      bookingMode: "seats",
+      seats: data.seatIds,
+      isWholeLab: data.isWholeLab,
+      groupSize: data.groupSize || data.seatIds.length,
+      ticketCode,
+      timeline: [
+        { at, actor: me.name, text: isInstant ? "Confirmed instantly" : "Seat booking request submitted" }
+      ],
+    };
+
+    set({ bookings: [newBooking, ...s.bookings] });
+    s.log(
+      isInstant ? "booking.seat_confirmed" : "booking.seat_requested",
+      res.name,
+      `${data.seatIds.join(", ")} on ${data.date} (${slot.start}) - ${isInstant ? "Instant Confirm" : "Queued"}`
+    );
+
+    s.notify(me.id, {
+      type: "approval",
+      title: isInstant ? `Confirmed: ${res.name}` : `Request Sent: ${res.name}`,
+      body: `Seat ${data.seatIds.join(", ")} on ${data.date} at ${slot.start}. Ticket: ${ticketCode}`,
+      link: "/bookings",
+    });
+
+    return { booking: newBooking, isInstant };
+  },
+
+  bookCinemaVenue: (data) => {
+    const s = get();
+    const me = s.me();
+    const res = s.resources.find((r) => r.id === data.resourceId)!;
+    const bid = id("b");
+    const at = now();
+    const startMin = toMin(data.start);
+    const endMin = toMin(data.end);
+    const duration = Math.max(1, Math.round((endMin - startMin) / 60));
+
+    // Competing requests check
+    const competing = s.bookings.filter(
+      (b) => b.resourceId === data.resourceId && b.date === data.date &&
+      (b.status === "pending" || b.status === "waitlisted") &&
+      startMin < toMin(b.start) + b.duration * 60 && endMin > toMin(b.start)
+    );
+
+    const isInstant = Boolean(res.instantConfirm && competing.length === 0);
+    const status = isInstant ? "approved" : "pending";
+    const ticketCode = `CS-${data.resourceId.slice(0, 4).toUpperCase()}-VN-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    const newBooking: Booking = {
+      id: bid,
+      resourceId: data.resourceId,
+      userId: me.id,
+      date: data.date,
+      start: data.start,
+      duration,
+      purpose: data.eventName,
+      purposeCategory: data.purposeCategory,
+      attachments: [],
+      status,
+      recommendation: "approve",
+      createdAt: at,
+      bookingMode: "whole_venue",
+      eventName: data.eventName,
+      expectedAttendees: data.expectedAttendees,
+      ticketCode,
+      timeline: [
+        { at, actor: me.name, text: isInstant ? "Confirmed instantly" : "Venue booking request submitted" }
+      ],
+    };
+
+    set({ bookings: [newBooking, ...s.bookings] });
+    s.log(
+      isInstant ? "booking.venue_confirmed" : "booking.venue_requested",
+      res.name,
+      `${data.eventName} on ${data.date} (${data.start}-${data.end}) - ${isInstant ? "Instant Confirm" : "Queued"}`
+    );
+
+    s.notify(me.id, {
+      type: "approval",
+      title: isInstant ? `Confirmed: ${res.name}` : `Request Sent: ${res.name}`,
+      body: `${data.eventName} on ${data.date} (${data.start} to ${data.end}). Ticket: ${ticketCode}`,
+      link: "/bookings",
+    });
+
+    return { booking: newBooking, isInstant };
+  },
+
+  extendBooking: (bid, hours) => {
+    const s = get();
+    const me = s.me();
+    const b = s.bookings.find((x) => x.id === bid);
+    if (!b) return;
+    const newDuration = b.duration + hours;
+    set({
+      bookings: s.bookings.map((x) =>
+        x.id === bid
+          ? {
+              ...x,
+              duration: newDuration,
+              extendedHours: (x.extendedHours || 0) + hours,
+              timeline: [...x.timeline, { at: now(), actor: me.name, text: `Extended booking by +${hours} hour(s)` }],
+            }
+          : x
+      ),
+    });
+    s.log("booking.extended", bid, `Extended by ${hours}h (total: ${newDuration}h)`);
+    s.notify(me.id, {
+      type: "info",
+      title: "Booking Extended",
+      body: `Your booking was extended by ${hours} hour(s).`,
+      link: "/bookings",
+    });
+  },
+
+  completeTraining: (skillName) => {
+    const me = get().me();
+    const updatedUsers = get().users.map((u) =>
+      u.id === me.id ? { ...u, skills: [...new Set([...(u.skills || []), skillName])] } : u
+    );
+    set({ users: updatedUsers });
+    get().log("user.training", me.name, `Completed training certification: ${skillName}`);
+    get().notify(me.id, {
+      type: "info",
+      title: "Training Certified! 🎓",
+      body: `You are now certified in "${skillName}". Equipment is unlocked!`,
+      link: "/discover",
+    });
   },
 }));
 

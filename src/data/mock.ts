@@ -4,6 +4,14 @@ import type {
   Volunteer, Doubt, Enrollment, Token, Scheme, HelpAppt, Shift, PartnerOrg, Notification,
   AuditEntry, Weights, BookingStatus, Contest,
 } from "./types";
+import {
+  createComputerLabLayout,
+  create3DPrinterLayout,
+  createElectronicsLayout,
+  createStudyHallLayout,
+  DEFAULT_SLOTS,
+  STUDY_SLOTS,
+} from "./cinemaMock";
 
 export const TODAY = startOfDay(new Date());
 export const d = (n: number) => format(addDays(TODAY, n), "yyyy-MM-dd");
@@ -43,19 +51,204 @@ const R = (id: string, label: string, kind: "verified" | "student" | "skill" | "
 const verifiedReq = R("r-ver", "Identity verified", "verified");
 
 export const resources: Resource[] = [
-  { id: "chem-lab-2", name: "Chemistry Lab 2", type: "lab", dept: "Chemistry", location: "Science Block, 2nd floor", capacity: 30, image: u("photo-1532094349884-543bc11b234d"), description: "Fully equipped wet lab with 15 workbenches, fume hoods and safety showers. Ideal for supervised practicals and science club experiments.", rules: ["Lab coat and goggles mandatory", "No food or drink", "Supervisor must be present"], requirements: [verifiedReq, R("r-stu", "Enrolled college student", "student"), R("r-safe", "Lab Safety badge", "skill", "Lab Safety")], availability: "Mon–Sat, 2 PM – 6 PM", ownerId: "u6", maxHours: 3, checklist: ["Fume hoods working", "Glassware intact", "Benches clean", "Safety shower clear"] },
-  { id: "seminar-a", name: "Seminar Hall A", type: "hall", dept: "Administration", location: "Main Building, Ground floor", capacity: 120, image: u("photo-1505373877841-8d25f7d46678"), description: "Air-conditioned seminar hall with projector, PA system and tiered seating. Popular for talks and club meetings.", rules: ["Leave the hall as you found it", "Sound system operated by staff only", "Max 3 hours per booking"], requirements: [verifiedReq], availability: "Daily, 9 AM – 8 PM", ownerId: "u7", maxHours: 3, checklist: ["Projector working", "Mic and speakers working", "Chairs arranged", "AC working", "Hall clean"] },
-  { id: "auditorium", name: "Main Auditorium", type: "hall", dept: "Administration", location: "Central Campus", capacity: 600, image: u("photo-1503095396549-807759245b35"), description: "Our largest venue with stage lighting, green rooms and accessible seating. Used for camps, festivals and big community events.", rules: ["Book at least 3 days ahead", "Event coordinator must approve", "No open flames"], requirements: [verifiedReq, R("r-18", "Applicant is 18+", "age18")], availability: "Weekends, 9 AM – 9 PM", ownerId: "u7", maxHours: 6, checklist: ["Stage clear", "Lights working", "Seats undamaged", "Fire exits clear"] },
-  { id: "printer-3d", name: "3D Printer Bay", type: "equipment", dept: "Mechanical", location: "Innovation Hub", capacity: 4, image: u("photo-1631541909061-71e349d1f203"), description: "Four FDM printers with PLA and PETG filament. Bring your STL file on a USB drive.", rules: ["Max 4 hours print time", "Pay for filament over 200g", "Clean the print bed"], requirements: [verifiedReq, R("r-stu", "Enrolled college student", "student")], availability: "Mon–Fri, 10 AM – 5 PM", ownerId: "u7", maxHours: 4, checklist: ["Nozzle clean", "Bed level", "Filament spool loaded", "No loose parts"] },
-  { id: "laser", name: "Laser Cutter", type: "equipment", dept: "Mechanical", location: "Innovation Hub", capacity: 2, image: u("photo-1581092160562-40aa08e78837"), description: "40W CO2 laser cutter for wood, acrylic and card. Supervised use only.", rules: ["Never leave running unattended", "Approved materials only", "Exhaust must be on"], requirements: [verifiedReq, R("r-safe", "Lab Safety badge", "skill", "Lab Safety")], availability: "Tue & Thu, 11 AM – 4 PM", ownerId: "u7", maxHours: 2, checklist: ["Lens clean", "Exhaust working", "Bed clear of debris"] },
-  { id: "drone", name: "Drone Arena", type: "lab", dept: "Engineering", location: "Sports Complex, Indoor Net", capacity: 10, image: u("photo-1473968512647-3e447244af8f"), description: "Netted indoor arena for drone practice and robotics competitions.", rules: ["Propeller guards required", "Max 2 drones at once"], requirements: [verifiedReq, R("r-stu", "Enrolled college student", "student")], availability: "Sat, 10 AM – 4 PM", ownerId: "u7", maxHours: 2, checklist: ["Nets intact", "Floor clear", "Charging station off"] },
-  { id: "dslr", name: "DSLR Kit", type: "equipment", dept: "Media Studies", location: "Media Lab store", capacity: 1, image: u("photo-1516035069371-29a1b244cc32"), description: "Canon DSLR body with 18-55mm and 50mm lenses, tripod and 2 batteries.", rules: ["Return within 48 hours", "Report any damage immediately"], requirements: [verifiedReq, R("r-cam", "Camera Handling badge", "skill", "Camera Handling")], availability: "Mon–Sat pickup, 10 AM – 1 PM", ownerId: "u7", maxHours: 48, checklist: ["Body scratch-free", "Both lenses with caps", "2 batteries + charger", "Tripod complete", "SD card included"] },
-  { id: "electronics", name: "Electronics Lab", type: "lab", dept: "ECE", location: "Engineering Block, 1st floor", capacity: 24, image: u("photo-1518770660439-4636190af475"), description: "Oscilloscopes, soldering stations, power supplies and component library.", rules: ["Switch off soldering irons", "Return components to bins"], requirements: [verifiedReq, R("r-elb", "Electronics Basics badge", "skill", "Electronics Basics")], availability: "Mon–Fri, 3 PM – 7 PM", ownerId: "u6", maxHours: 3, checklist: ["Soldering irons cold", "Scopes working", "Bins sorted"] },
-  { id: "comp-lab-4", name: "Computer Lab 4", type: "lab", dept: "Computer Science", location: "IT Block, 3rd floor", capacity: 40, image: u("photo-1517694712202-14dd9538aa97"), description: "40 desktops with high-speed internet, office software and coding tools. Open to community learners who completed Computer Basics.", rules: ["No installing software", "Log out after use"], requirements: [verifiedReq, R("r-cb", "Computer Basics badge", "skill", "Computer Basics")], availability: "Daily, 4 PM – 8 PM", ownerId: "u6", maxHours: 2, checklist: ["All PCs boot", "Keyboards and mice present", "Desks clean"] },
-  { id: "podcast", name: "Podcast Studio", type: "classroom", dept: "Media Studies", location: "Media Lab, Room 12", capacity: 4, image: u("photo-1590602847861-f357a9332bbc"), description: "Soundproofed booth with 4 mics, mixer and recording laptop.", rules: ["Headphones must be returned", "No food inside the booth"], requirements: [verifiedReq], availability: "Mon–Sat, 11 AM – 7 PM", ownerId: "u7", maxHours: 2, checklist: ["4 mics working", "Mixer powered off", "Headphones present"] },
-  { id: "vr", name: "VR Set", type: "equipment", dept: "Computer Science", location: "Innovation Hub", capacity: 1, image: u("photo-1593508512255-86ab42a8e620"), description: "Standalone VR headset with two controllers and a library of learning apps.", rules: ["Sanitise after use", "Use in clear 2m area"], requirements: [verifiedReq, R("r-stu", "Enrolled college student", "student")], availability: "Mon–Fri, 12 PM – 5 PM", ownerId: "u6", maxHours: 2, checklist: ["Lens clean", "Both controllers", "Charger present"] },
-  { id: "robotics", name: "Robotics Workshop", type: "lab", dept: "Engineering", location: "Innovation Hub, Bay 3", capacity: 16, image: u("photo-1561557944-6e7860d1a7eb"), description: "Robot kits, servo motors, Arduino boards and a test track.", rules: ["Kits return complete", "Batteries removed after use"], requirements: [verifiedReq, R("r-elb", "Electronics Basics badge", "skill", "Electronics Basics")], availability: "Wed & Sat, 2 PM – 6 PM", ownerId: "u6", maxHours: 3, checklist: ["Kits complete", "Batteries out", "Track clear"] },
-  { id: "study-hall", name: "Study Center Hall", type: "hall", dept: "Library", location: "Library Annex, Block C", capacity: 60, image: u("photo-1521587760476-6c12a4b040da"), description: "Quiet, well-lit hall with 60 desks, Wi-Fi and charging points. Hosts the Free Study Center.", rules: ["Silence in quiet zone", "Max 3 sessions per week"], requirements: [verifiedReq], availability: "Daily, 7 AM – 9 PM", ownerId: "u6", maxHours: 4, checklist: ["Lights working", "Desks clean"] },
+  // 1. Computer Lab 4: Mode 1 (Seats) - 30 seats, 6x5, 4 slots/day
+  {
+    id: "comp-lab-4",
+    name: "Computer Lab 4",
+    type: "lab",
+    dept: "Computer Science",
+    location: "IT Block, 3rd floor",
+    capacity: 30,
+    bookingMode: "seat",
+    seatLayout: createComputerLabLayout(),
+    slots: DEFAULT_SLOTS,
+    maxSeatsPerBooking: 5,
+    image: u("photo-1517694712202-14dd9538aa97"),
+    description: "30 high-speed developer workstations with coding environments, dual monitors and gigabit LAN. Fast-track cinema style seat booking.",
+    rules: ["No food or unsealed drinks", "Save files to network drive or USB", "Log out before leaving"],
+    requirements: [verifiedReq, R("r-cb", "Computer Basics badge", "skill", "Computer Basics")],
+    availability: "Daily, 9 AM – 6 PM",
+    ownerId: "u6",
+    maxHours: 4,
+    checklist: ["Workstation boots", "Peripherals connected", "Desk clean and sanitized"],
+  },
+
+  // 2. 3D Printer Bay: Mode 1 (Seats / Equipment Stations) - 4 printers
+  {
+    id: "printer-3d",
+    name: "3D Printer Bay",
+    type: "equipment",
+    dept: "Mechanical",
+    location: "Innovation Hub, Ground Floor",
+    capacity: 4,
+    bookingMode: "seat",
+    seatLayout: create3DPrinterLayout(),
+    slots: DEFAULT_SLOTS,
+    maxSeatsPerBooking: 1,
+    image: u("photo-1631541909061-71e349d1f203"),
+    description: "Four precision FDM 3D printers with PLA, PETG and high-temp industrial nozzles. Requires safety certification on high-temp unit.",
+    rules: ["Max 4 hours print run per reservation", "Check bed adhesion before walking away", "Report filament jams"],
+    requirements: [verifiedReq, R("r-stu", "Enrolled college student", "student")],
+    availability: "Mon–Fri, 9 AM – 6 PM",
+    ownerId: "u7",
+    maxHours: 4,
+    checklist: ["Nozzle clean and clear", "Print bed leveled", "Spool intact and fed"],
+  },
+
+  // 3. Electronics Lab: Mode 1 (Seats / Benches) - 12 benches
+  {
+    id: "electronics",
+    name: "Electronics Lab",
+    type: "lab",
+    dept: "ECE",
+    location: "Engineering Block, 1st floor",
+    capacity: 12,
+    bookingMode: "seat",
+    seatLayout: createElectronicsLayout(),
+    slots: DEFAULT_SLOTS,
+    maxSeatsPerBooking: 2,
+    image: u("photo-1518770660439-4636190af475"),
+    description: "12 high-grade electronics workstations equipped with digital oscilloscopes, function generators, DC supplies and fume-extracted soldering.",
+    rules: ["Switch off soldering irons immediately", "Return all discrete components to designated bins", "Wear ESD wristbands"],
+    requirements: [verifiedReq, R("r-elb", "Electronics Basics badge", "skill", "Electronics Basics")],
+    availability: "Mon–Fri, 9 AM – 6 PM",
+    ownerId: "u6",
+    maxHours: 3,
+    checklist: ["Soldering irons powered off", "Scopes calibrated", "Tools organized"],
+  },
+
+  // 4. Seminar Hall A: Mode 2 (Whole-Venue) - 200 capacity
+  {
+    id: "seminar-a",
+    name: "Seminar Hall A",
+    type: "hall",
+    dept: "Administration",
+    location: "Main Building, Ground floor",
+    capacity: 200,
+    bookingMode: "venue",
+    instantConfirm: false,
+    image: u("photo-1505373877841-8d25f7d46678"),
+    description: "Air-conditioned 200-seat acoustic amphitheatre with dual 4K laser projectors, wireless microphones, and lecture capture facilities.",
+    rules: ["Leave hall in clean tiered configuration", "Sound system operated via podium tablet", "No catering inside hall"],
+    requirements: [verifiedReq],
+    availability: "Daily, 9 AM – 9 PM",
+    ownerId: "u7",
+    maxHours: 6,
+    checklist: ["Projector power off", "Podium locked", "Seats undamaged", "Trash cleared"],
+  },
+
+  // 5. Main Auditorium: Mode 2 (Whole-Venue) - 500 capacity, Instant Confirm ON
+  {
+    id: "auditorium",
+    name: "Main Auditorium",
+    type: "hall",
+    dept: "Administration",
+    location: "Central Campus Plaza",
+    capacity: 500,
+    bookingMode: "venue",
+    instantConfirm: true,
+    image: u("photo-1503095396549-807759245b35"),
+    description: "Flagship 500-seat auditorium with professional theatrical lighting, dual green rooms, and orchestra pit. Instant confirmation for certified faculty.",
+    rules: ["Requires 48-hour cancellation notice", "Fire exits must remain completely unblocked", "No open flames"],
+    requirements: [verifiedReq, R("r-18", "Applicant is 18+", "age18")],
+    availability: "Weekends & Evenings, 9 AM – 9 PM",
+    ownerId: "u7",
+    maxHours: 8,
+    checklist: ["Stage washed", "Rigging secured", "Emergency exits clear", "Audio racks off"],
+  },
+
+  // Other Campus Spaces
+  {
+    id: "study-hall",
+    name: "Study Center Hall",
+    type: "hall",
+    dept: "Library",
+    location: "Library Annex, Block C",
+    capacity: 60,
+    bookingMode: "seat",
+    seatLayout: createStudyHallLayout(),
+    slots: STUDY_SLOTS,
+    maxSeatsPerBooking: 1,
+    image: u("photo-1521587760476-6c12a4b040da"),
+    description: "60 individual study cubicles with power sockets, noise-dampening dividers and high-speed Wi-Fi.",
+    rules: ["Strict silence policy", "Do not reserve seats for unattended friends"],
+    requirements: [verifiedReq],
+    availability: "Daily, 7 AM – 9 PM",
+    ownerId: "u6",
+    maxHours: 4,
+    checklist: ["Desk clean", "Chair aligned", "Trash disposed"],
+  },
+  {
+    id: "chem-lab-2",
+    name: "Chemistry Lab 2",
+    type: "lab",
+    dept: "Chemistry",
+    location: "Science Block, 2nd floor",
+    capacity: 30,
+    bookingMode: "seat",
+    slots: DEFAULT_SLOTS,
+    image: u("photo-1532094349884-543bc11b234d"),
+    description: "Fully equipped wet lab with 15 workbenches, fume hoods and safety showers.",
+    rules: ["Lab coat and goggles mandatory", "No food or drink"],
+    requirements: [verifiedReq, R("r-stu", "Enrolled college student", "student"), R("r-safe", "Lab Safety badge", "skill", "Lab Safety")],
+    availability: "Mon–Sat, 2 PM – 6 PM",
+    ownerId: "u6",
+    maxHours: 3,
+    checklist: ["Fume hoods working", "Glassware intact", "Benches clean"],
+  },
+  {
+    id: "laser",
+    name: "Laser Cutter Bay",
+    type: "equipment",
+    dept: "Mechanical",
+    location: "Innovation Hub",
+    capacity: 2,
+    bookingMode: "seat",
+    slots: DEFAULT_SLOTS,
+    image: u("photo-1581092160562-40aa08e78837"),
+    description: "40W CO2 laser cutter for wood, acrylic and card. Supervised use only.",
+    rules: ["Never leave running unattended", "Approved materials only"],
+    requirements: [verifiedReq, R("r-safe", "Lab Safety badge", "skill", "Lab Safety")],
+    availability: "Tue & Thu, 11 AM – 4 PM",
+    ownerId: "u7",
+    maxHours: 2,
+    checklist: ["Lens clean", "Exhaust working", "Bed clear"],
+  },
+  {
+    id: "podcast",
+    name: "Podcast Studio",
+    type: "classroom",
+    dept: "Media Studies",
+    location: "Media Lab, Room 12",
+    capacity: 4,
+    bookingMode: "seat",
+    slots: DEFAULT_SLOTS,
+    image: u("photo-1590602847861-f357a9332bbc"),
+    description: "Soundproofed booth with 4 broadcast microphones, audio interface and monitor headphones.",
+    rules: ["Headphones must be returned to rack", "No drinks near sound board"],
+    requirements: [verifiedReq],
+    availability: "Mon–Sat, 11 AM – 7 PM",
+    ownerId: "u7",
+    maxHours: 2,
+    checklist: ["4 mics working", "Mixer powered off"],
+  },
+  {
+    id: "drone",
+    name: "Drone Arena",
+    type: "lab",
+    dept: "Engineering",
+    location: "Sports Complex",
+    capacity: 10,
+    bookingMode: "venue",
+    image: u("photo-1473968512647-3e447244af8f"),
+    description: "Netted indoor arena for autonomous drone testing and robotics flight maneuvers.",
+    rules: ["Propeller guards mandatory", "Max 2 drones active simultaneously"],
+    requirements: [verifiedReq, R("r-stu", "Enrolled college student", "student")],
+    availability: "Sat, 10 AM – 4 PM",
+    ownerId: "u7",
+    maxHours: 2,
+    checklist: ["Nets intact", "Floor clear", "Chargers off"],
+  },
 ];
 
 export const speakers: Speaker[] = [
@@ -229,6 +422,86 @@ programs.filter((p) => p.id !== "study" && p.id !== "g1").forEach((p, i) => {
 });
 // Deliberate conflict: a student booking overlapping the career session c1 in Seminar Hall A
 bookings.push({ id: "b-conf", resourceId: "seminar-a", userId: "u5", date: d(2), start: "11:30", duration: 2, purpose: "Film club screening", attachments: [], status: "pending", recommendation: "waitlist", timeline: [{ at: ts(-5), actor: "Applicant", text: "Request submitted" }] });
+
+// Seed Specific Mock Bookings as requested for Cinema Seats and Venue Timeline
+// Computer Lab 4: 5 seats booked, 3 requested, for today's 11:00-13:00 slot
+const bookedSeatsLab4 = ["A1", "A2", "B4", "C3", "E5"];
+bookedSeatsLab4.forEach((sId, idx) => {
+  bookings.push({
+    id: `b-cl4-booked-${sId}`,
+    resourceId: "comp-lab-4",
+    userId: ["u2", "u3", "u4", "u5", "u15"][idx % 5],
+    date: d(0),
+    start: "11:00",
+    duration: 2,
+    purpose: "Autonomous systems software development & data modeling",
+    attachments: [],
+    status: "approved",
+    recommendation: "approve",
+    bookingMode: "seat",
+    seats: [sId],
+    ticketCode: `TKT-CS4-${sId}-8942`,
+    timeline: [{ at: ts(-12), actor: "Applicant", text: "Selected seat and confirmed" }],
+  });
+});
+
+const requestedSeatsLab4 = ["B2", "C4", "D1"];
+requestedSeatsLab4.forEach((sId, idx) => {
+  bookings.push({
+    id: `b-cl4-req-${sId}`,
+    resourceId: "comp-lab-4",
+    userId: ["u16", "u17", "u4"][idx % 3],
+    date: d(0),
+    start: "11:00",
+    duration: 2,
+    purpose: "Final year capstone engineering project simulation",
+    attachments: [],
+    status: "pending",
+    recommendation: "approve",
+    bookingMode: "seat",
+    seats: [sId],
+    ticketCode: `TKT-CS4-${sId}-PEND`,
+    timeline: [{ at: ts(-2), actor: "Applicant", text: "Submitted request for seat" }],
+  });
+});
+
+// Seminar Hall A (Mode 2): One class booked Tuesday 10-12, one request in demand Saturday 10-13
+bookings.push(
+  {
+    id: "b-sem-class-tue",
+    resourceId: "seminar-a",
+    userId: "u7",
+    date: d(1), // Tuesday
+    start: "10:00",
+    duration: 2,
+    purpose: "CS301 Advanced Distributed Systems Lecture",
+    eventName: "Advanced Operating Systems Lecture",
+    expectedAttendees: 65,
+    attachments: [],
+    status: "approved",
+    recommendation: "approve",
+    bookingMode: "venue",
+    ticketCode: "TKT-SEM-VNU-0129",
+    timeline: [{ at: ts(-48), actor: "Prof. Sunita Rao", text: "Class scheduled by department" }],
+  },
+  {
+    id: "b-sem-dem-sat",
+    resourceId: "seminar-a",
+    userId: "u5",
+    date: d(5), // Saturday
+    start: "10:00",
+    duration: 3,
+    purpose: "Inter-College Robotics Workshop & Hackathon Showcase",
+    eventName: "Robotics Club Showcase",
+    expectedAttendees: 90,
+    attachments: [],
+    status: "pending",
+    recommendation: "approve",
+    bookingMode: "venue",
+    ticketCode: "TKT-SEM-VNU-PEND",
+    timeline: [{ at: ts(-6), actor: "Kabir Singh", text: "Submitted request for whole venue" }],
+  }
+);
 
 export const incidents: Incident[] = [
   { id: "inc1", bookingId: "b3", resourceId: "printer-3d", reporterId: "u5", kind: "damage", severity: "medium", description: "Print nozzle clogged after a PETG print; bed has a small scratch.", photos: [], status: "reviewing", at: ts(-30) },

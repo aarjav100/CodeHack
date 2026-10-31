@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_dashboard" name="shell-type"/>
+<title>CampusSphere - Civic Space Booking</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body { margin:0; padding:0; }
+      body { overscroll-behavior: none; }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "error-container": "#ffdad6",
+            "on-primary-container": "#eeefff",
+            "on-primary": "#ffffff",
+            "secondary-fixed": "#6ffbbe",
+            "inverse-surface": "#283044",
+            "tertiary-fixed": "#e1e0ff",
+            "on-tertiary-fixed-variant": "#2f2ebe",
+            "on-tertiary-fixed": "#07006c",
+            "error": "#ba1a1a",
+            "surface-variant": "#e2e8f0",
+            "secondary-fixed-dim": "#4edea3",
+            "on-secondary-fixed-variant": "#005236",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "inverse-on-surface": "#eef0ff",
+            "surface-bright": "#faf8ff",
+            "surface-container": "#f1f5f9",
+            "surface-container-high": "#e2e8f0",
+            "on-error-container": "#93000a",
+            "surface-dim": "#d2d9f4",
+            "on-background": "#0f172a",
+            "tertiary-fixed-dim": "#c0c1ff",
+            "inverse-primary": "#b4c5ff",
+            "outline": "#64748b",
+            "on-secondary-container": "#00714d",
+            "primary-container": "#2563eb",
+            "primary-fixed": "#dbe1ff",
+            "background": "#f8fafc",
+            "on-primary-fixed": "#00174b",
+            "on-tertiary-container": "#f1eeff",
+            "outline-variant": "#cbd5e1",
+            "tertiary": "#3b82f6",
+            "on-error": "#ffffff",
+            "surface-tint": "#2563eb",
+            "on-surface-variant": "#475569",
+            "surface-container-highest": "#cbd5e1",
+            "primary": "#2563eb",
+            "on-secondary": "#ffffff",
+            "primary-fixed-dim": "#b4c5ff",
+            "secondary": "#059669",
+            "on-secondary-fixed": "#002113",
+            "secondary-container": "#d1fae5",
+            "tertiary-container": "#eff6ff",
+            "on-surface": "#0f172a",
+            "surface": "#f8fafc",
+            "on-primary-fixed-variant": "#003ea8",
+            "surface-container-low": "#ffffff"
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            body: ['"Plus Jakarta Sans"', 'sans-serif']
+          },
+          borderRadius: {
+            DEFAULT: "0.5rem",
+            lg: "0.75rem",
+            xl: "1rem",
+            "2xl": "1.25rem",
+            full: "9999px"
+          },
+          boxShadow: {
+            subtle: "0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)",
+            card: "0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -2px rgba(0, 0, 0, 0.03)"
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-background font-body text-on-surface antialiased">
+<!-- Friendly Light Sidebar -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-white border-r border-slate-200 z-50 flex flex-col justify-between pt-16">
+<div class="flex-1 overflow-y-auto px-4 py-6">
+<!-- Student Profile Card -->
+<div class="p-3.5 mb-6 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center gap-3">
+<img alt="Profile" class="w-10 h-10 rounded-full object-cover ring-2 ring-blue-500/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzWVNobO3iTk9RktHSZOLdFxV23PlNu5cF5GZgDuxODyPEZJgyogZW_mbKkF1RYZoDxQTIIBTYAy3uX_uxS1aNKACgB6aacpKRtVBsPEdr44IgHm0pwhKONu1XikdATZ1lTPW9MsyOj0INdWBzK5LOv9V4ilm63UGLEnzwuo-t722OAL3o6Ys3UAx6CkzdpfsjOBCEsdCiRdoTyr5_WobvmGilFoEj34C0DPT8He49"/>
+<div class="min-w-0 flex-1">
+<div class="font-semibold text-sm text-slate-900 truncate">Aarjav Jain</div>
+<div class="text-xs text-emerald-600 font-medium flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            Student Verified
+          </div>
+</div>
+</div>
+<!-- Main Navigation -->
+<div class="px-2 mb-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Campus Spaces</span>
+</div>
+<nav class="space-y-1 mb-6">
+<a aria-current="page" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-700 font-semibold transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px] text-blue-600">grid_view</span>
+<span class="text-sm">Discover Spaces</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px] text-slate-400">event_available</span>
+<span class="text-sm flex-1">My Bookings</span>
+<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">2 active</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px] text-slate-400">diversity_3</span>
+<span class="text-sm">Community Programs</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px] text-slate-400">badge</span>
+<span class="text-sm">Civic Passport</span>
+</a>
+</nav>
+<!-- Governance / Approvals -->
+<div class="px-2 mb-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Community Care</span>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px] text-slate-400">fact_check</span>
+<span class="text-sm flex-1">Shared Approvals</span>
+<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">1 review</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px] text-slate-400">help_outline</span>
+<span class="text-sm">Support &amp; Guidelines</span>
+</a>
+</nav>
+</div>
+<!-- Friendly Fairness Badge -->
+<div class="p-4 m-3 bg-blue-50/70 border border-blue-100 rounded-xl">
+<div class="flex items-center gap-2 mb-1.5">
+<span class="material-symbols-outlined text-[18px] text-blue-600">verified</span>
+<span class="text-xs font-bold text-blue-900 uppercase tracking-wide">Fair-Share Campus</span>
+</div>
+<p class="text-xs text-slate-600 leading-relaxed">
+        Equal access for all students. Free reservations with campus ID.
+      </p>
+<div class="mt-2.5 flex items-center justify-between text-xs">
+<span class="text-slate-500 font-medium">Your Standing:</span>
+<span class="font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-md">Excellent (Tier 1)</span>
+</div>
+</div>
+</aside>
+<!-- Content Container with pl-64 -->
+<div class="pl-64">
+<!-- Clean, Inviting Header -->
+<header class="fixed top-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-md border-b border-slate-200/90 z-40 flex items-center justify-between px-6">
+<div class="flex items-center gap-4 min-w-[240px]">
+<img alt="CampusSphere Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Wjdi0-mlF7zw2jHrU48A7yjsMqLKcMsb70LcAoU1lDyX6Is6UTK66DGybvgmfmvjZMLuTZAkbQqKZFwOL-k_wTQfT8RHw0z6HCZtqLh97HH5go0mcJzw1X3jiD8oeIQhoDe3eo09ZA01RiVXOlLguo_CgvL-0liaZl2_1wa00xln8s20ZecHqzD9qp2ywkDTAE5qCLCSBsSi_VMzoUhjWsdwRbUdIQ8OKfKUGDga8xEA"/>
+<div class="flex items-center gap-2">
+<span class="text-lg font-bold text-slate-900 tracking-tight">CampusSphere</span>
+<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">Civic Commons</span>
+</div>
+</div>
+<!-- Inviting, Prominent Search Bar -->
+<div class="flex-1 max-w-lg mx-6">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-slate-400 text-[20px]">search</span>
+<input class="w-full bg-slate-100/80 hover:bg-slate-100 border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 pl-11 pr-4 py-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all shadow-sm" placeholder="Search labs, halls, equipment or workshops..." type="text"/>
+</div>
+</div>
+<!-- Top Right Actions -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200/70 text-xs font-medium text-slate-600">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>Campus Spaces: Open</span>
+</div>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors">
+<span class="material-symbols-outlined text-[16px] text-slate-500">notifications</span>
+<span>Alerts</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>New Request</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="w-full pt-16 bg-slate-50/60 min-h-screen px-8 py-6">
+<div class="max-w-7xl mx-auto space-y-6">
+<!-- Human Friendly Metric & Vitals Bar -->
+<section class="bg-white border border-slate-200 rounded-2xl p-4 shadow-subtle">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex flex-wrap items-center gap-6">
+<!-- Metric 1 -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined text-[22px]">meeting_room</span>
+</div>
+<div>
+<div class="text-xs text-slate-500 font-medium">Available Today</div>
+<div class="text-base font-bold text-slate-900">34 <span class="text-xs font-normal text-slate-500">of 42 spaces</span></div>
+</div>
+</div>
+<div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
+<!-- Metric 2 -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined text-[22px]">schedule</span>
+</div>
+<div>
+<div class="text-xs text-slate-500 font-medium">Instant Booking</div>
+<div class="text-base font-bold text-emerald-600">Open for Booking</div>
+</div>
+</div>
+<div class="h-8 w-px bg-slate-200 hidden md:block"></div>
+<!-- Metric 3 -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">
+<span class="material-symbols-outlined text-[22px]">pin_invoke</span>
+</div>
+<div>
+<div class="text-xs text-slate-500 font-medium">Digital Access</div>
+<div class="text-base font-bold text-slate-900">Quick Check-in Ready</div>
+</div>
+</div>
+</div>
+<!-- Fairness Guarantee Badge -->
+<div class="flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200/80 px-3.5 py-1.5 rounded-full text-xs font-semibold">
+<span class="material-symbols-outlined text-[18px] text-emerald-600">balance</span>
+<span>Fair Campus Allocation: Guaranteed</span>
+</div>
+</div>
+</section>
+<!-- Clean Tactile Category Filters -->
+<section class="bg-white border border-slate-200 rounded-2xl p-3.5 shadow-subtle">
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+<!-- Filter Pills -->
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0" id="resource-tabs">
+<button class="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-sm transition-all whitespace-nowrap">
+                All Spaces (42)
+              </button>
+<button class="px-4 py-2 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all whitespace-nowrap">
+                Study &amp; Labs (12)
+              </button>
+<button class="px-4 py-2 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all whitespace-nowrap">
+                Halls &amp; Stages (9)
+              </button>
+<button class="px-4 py-2 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all whitespace-nowrap">
+                Creative &amp; Media (15)
+              </button>
+<button class="px-4 py-2 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all whitespace-nowrap">
+                Instant Access (6)
+              </button>
+</div>
+<!-- Quick Availability Toggles -->
+<div class="flex flex-wrap items-center gap-2">
+<div class="flex items-center bg-slate-100 p-1 rounded-xl">
+<button class="px-3 py-1 rounded-lg bg-white text-blue-600 font-semibold text-xs shadow-xs">Available Now</button>
+<button class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 font-medium text-xs">Today</button>
+<button class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 font-medium text-xs">This Weekend</button>
+</div>
+<!-- Clear Passport Eligibility Tag -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-xs font-semibold">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>Student ID Verified</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Resource Grid -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- CARD 1: Chemistry Lab 2 (Large Primary Anchor - 7 Cols) -->
+<article class="md:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 shadow-card hover:border-slate-300 transition-all flex flex-col justify-between group">
+<div>
+<!-- Top Row Status -->
+<div class="flex items-center justify-between mb-3.5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 font-semibold text-xs">
+<span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                  Science &amp; Research Lab
+                </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold text-xs">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+                  Available Now
+                </span>
+</div>
+<!-- Media & Details Split -->
+<div class="grid grid-cols-1 sm:grid-cols-12 gap-4 mb-4">
+<div class="sm:col-span-5 relative rounded-xl overflow-hidden h-44 sm:h-auto bg-slate-100">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A clean modern high-tech university chemistry lab with glassware beakers, volumetric flasks, digital fume hoods, polished black quartz counters and ambient teal emergency status LED accents under bright clinical lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHnw58oBlHW-ZgvYF2_izhL0nv-vVx9rxsiEZzpudu_qd5EijwW4pQShKSai_tz9KFoqIx7iP_AnukbcZjUkpvq9p67KGi7irVbr4nNj0dniYwP9QZds8yLJ4IVKNlFbD4MJUA2eP8NnAYNg_kCoSTT6GGY6nMulvKPqDSXfW3zqDHNgU3nqruBZGDetjjL1N7fXCCza30m1MTWmb4ILyl8bncsJBmoduS_b7pTG5P"/>
+<span class="absolute bottom-2 left-2 px-2.5 py-1 rounded-md bg-white/95 backdrop-blur text-xs font-semibold text-slate-800 shadow-sm">
+                    Science Block · Fl 2
+                  </span>
+</div>
+<div class="sm:col-span-7 flex flex-col justify-between">
+<div>
+<h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">Chemistry Lab 2</h3>
+<p class="text-xs text-slate-500 mt-1 leading-relaxed">Modern bio-molecular research benches with fume hoods and spectrometry equipment.</p>
+<!-- Key Spec Badges -->
+<div class="grid grid-cols-3 gap-2 mt-3.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
+<div>
+<span class="block text-[11px] font-medium text-slate-400">Capacity</span>
+<span class="text-xs font-bold text-slate-800">30 Workstations</span>
+</div>
+<div>
+<span class="block text-[11px] font-medium text-slate-400">Safety Level</span>
+<span class="text-xs font-bold text-emerald-600">Level 2 Certified</span>
+</div>
+<div>
+<span class="block text-[11px] font-medium text-slate-400">Cost</span>
+<span class="text-xs font-bold text-blue-600">Free Access</span>
+</div>
+</div>
+<!-- Clear Requirement Pill -->
+<div class="mt-3 flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">check_circle</span>
+<span>Eligible with standard student ID · <span class="text-slate-900 font-medium">Smart lock enabled</span></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Friendly Availability Schedule -->
+<div class="p-3 bg-slate-50 border border-slate-100 rounded-xl mb-3 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-blue-600">calendar_today</span>
+<span class="text-xs text-slate-700 font-medium">Availability: <strong class="text-slate-900">4 open slots this afternoon</strong></span>
+</div>
+<span class="text-xs font-semibold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">Fast Approval</span>
+</div>
+</div>
+<!-- Card Action Footer -->
+<div class="flex items-center justify-between pt-2 border-t border-slate-100">
+<span class="text-xs text-slate-500">Pin dispatched via SMS &amp; App</span>
+<button class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors flex items-center gap-1.5 shadow-sm">
+<span>Reserve Space</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- CARD 2: Main Auditorium (5 Cols) -->
+<article class="md:col-span-5 bg-white rounded-2xl border border-slate-200 p-5 shadow-card hover:border-slate-300 transition-all flex flex-col justify-between group">
+<div>
+<div class="flex items-center justify-between mb-3.5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 font-semibold text-xs">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  Main Auditorium
+                </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-semibold text-xs">
+                  2 Pending Requests
+                </span>
+</div>
+<div class="relative rounded-xl overflow-hidden h-36 bg-slate-100 mb-3.5">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Dramatically lit red auditorium stage with silhouette theatrical performers under warm ambient stage lights, velvet drapes, and high dark ceiling acoustic baffles." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1miS1-FuMU8Jt2YFSR9j5mDPEmoXFEe8z3UPS9hey6xgxW5WWASX0Q2dUQzJMjoKU5LyRz0iKxLvKfgwVXNNpg4IWxAXNKG8He2nhRChVPS6F_FRPS1cDjwRo0fCHDBsikdg8-BSb9kSCOj-uQqkaoumEuCxTMQKuNeucDKgcEiDItwglE0T-9rFei0AnFsX22BSvv2U3ZdTUdZfKt7iSiwmLWJn70GNBLV5Uppfd"/>
+<div class="absolute bottom-2 left-2 flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-white/95 backdrop-blur text-xs font-semibold text-slate-800 shadow-sm">Central Quad</span>
+<span class="px-2 py-0.5 rounded bg-white/95 backdrop-blur text-xs font-semibold text-blue-700 shadow-sm">Cap: 600 seats</span>
+</div>
+</div>
+<div>
+<h3 class="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">Main Campus Auditorium</h3>
+<p class="text-xs text-slate-500 mt-1 leading-relaxed">Full acoustic stage suitable for student summits, hackathons, and cultural evenings.</p>
+<!-- Simple Booking Status -->
+<div class="mt-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+<div class="flex justify-between items-center text-xs mb-1.5">
+<span class="text-slate-600 font-medium">Current Review Window</span>
+<span class="text-amber-700 font-bold">Closes at 5:00 PM</span>
+</div>
+<div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden flex">
+<div class="bg-blue-600 h-full" style="width: 60%" title="ACM Hackathon"></div>
+<div class="bg-amber-500 h-full" style="width: 30%" title="Debate Union"></div>
+<div class="bg-slate-300 h-full flex-1"></div>
+</div>
+<div class="flex items-center justify-between mt-1.5 text-[11px] text-slate-500">
+<span>Leading: ACM Hackathon</span>
+<span>Fair-vote active</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card Action Footer -->
+<div class="flex items-center justify-between pt-3 mt-3 border-t border-slate-100">
+<span class="text-xs text-slate-500 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-blue-600">group</span>
+                Student Org Eligible
+              </span>
+<button class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 font-semibold text-xs transition-colors flex items-center gap-1">
+<span>View Details</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</article>
+<!-- CARD 3: Seminar Hall A (Modular Presentation - 4 Cols) -->
+<article class="md:col-span-4 bg-white rounded-2xl border border-slate-200 p-4 shadow-card hover:border-slate-300 transition-all flex flex-col justify-between group">
+<div>
+<div class="relative rounded-xl overflow-hidden h-36 bg-slate-100 mb-3">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Wide shot of a lecture theater and modern seminar hall with tiered seating, keynote presenter on stage facing a wide digital projection screen and seated audience in soft moody overhead lights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9xtYRkdbs9arecgdHKqCx_E2dpcK5u7FlCbzb_gFlhD7FUeiNs0b-FSZ7yodvl0PgKBxFf9Gj6EUaN19KWWhgtNrOCovAjMVwTfevLTZ6-IZCoZIiCk3fsoAPilPW74RSrjEYLAxzMaygfDw3VYd7MIvyHwt-JKwOt4a4M2e8QmaR2gnJUeg5WVLjaJKNWl5zgIveJ4oo4HrLSM_n3QiN226T89nMAtryDZZenQvd"/>
+<span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-white/95 backdrop-blur text-xs font-semibold text-slate-800 shadow-sm">
+                  Seminar Hall A
+                </span>
+<span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-white/95 backdrop-blur text-xs font-semibold text-blue-700 shadow-sm">
+                  120 Seats
+                </span>
+</div>
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">Seminar Hall A</h3>
+<span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Free Today</span>
+</div>
+<p class="text-xs text-slate-500">Main Tower · Level 1 East Wing</p>
+<!-- Features -->
+<div class="flex flex-wrap gap-1.5 mt-3 mb-3">
+<span class="px-2 py-0.5 rounded-md bg-slate-100 text-[11px] font-medium text-slate-600">Dual 4K Laser</span>
+<span class="px-2 py-0.5 rounded-md bg-slate-100 text-[11px] font-medium text-slate-600">Mic Hub</span>
+<span class="px-2 py-0.5 rounded-md bg-slate-100 text-[11px] font-medium text-slate-600">Zoom Hybrid</span>
+</div>
+<div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs text-slate-600 mb-3">
+<span class="flex items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined text-[15px] text-blue-600">schedule</span>
+                  Approval Speed
+                </span>
+<span class="font-bold text-slate-800">Under 2 hours</span>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-800 text-xs font-semibold transition-colors text-center">
+              Quick Book
+            </button>
+</article>
+<!-- CARD 4: Drone & Avionics Lab (4 Cols) -->
+<article class="md:col-span-4 bg-white rounded-2xl border border-slate-200 p-4 shadow-card hover:border-slate-300 transition-all flex flex-col justify-between group">
+<div>
+<div class="relative rounded-xl overflow-hidden h-36 bg-slate-100 mb-3">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Industrial drone prototyping workbench with an enterprise multi-rotor drone frame, soldering irons, precision digital calipers, carbon fiber parts and electronics components under bright work lamp." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSxZqd-IgQ9_-hLUUJizRtQM5ZV1h5d6KKkmiTzoE5xe9dK5Gt8q5E2hLaJzkf4HT67hdPIqp7A1v35YOzchVWftSJnUpbAecnYrKwuKXAB6eqN2tASLVVK8meANPmx1o1AOwhRlzxjsHPd_fhzP1GL7R-qFNSlV0kGggpnAgFEVeMequMYH8qHoUTBNIaefmBYGOux8aH1ZZ16hgyXfg2TnNxdJWViyw3GRXvMb2X"/>
+<span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-white/95 backdrop-blur text-xs font-semibold text-slate-800 shadow-sm">
+                  Drone &amp; Robotics
+                </span>
+<span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-white/95 backdrop-blur text-xs font-semibold text-emerald-700 shadow-sm">
+                  2 Bays Open
+                </span>
+</div>
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">Drone &amp; Avionics Lab</h3>
+<span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Walk-in Open</span>
+</div>
+<p class="text-xs text-slate-500">Engineering Complex · Flight Cage</p>
+<!-- Equipment Included -->
+<div class="mt-3 p-2.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1 text-xs mb-3">
+<div class="flex justify-between text-slate-600">
+<span>Soldering Stations</span>
+<span class="font-semibold text-slate-800">2 Available</span>
+</div>
+<div class="flex justify-between text-slate-600">
+<span>Testing Sensors</span>
+<span class="font-semibold text-emerald-600">Calibrated &amp; Ready</span>
+</div>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-800 text-xs font-semibold transition-colors text-center">
+              Reserve Workstation
+            </button>
+</article>
+<!-- CARD 5: Knitting & Textile Fab (4 Cols) -->
+<article class="md:col-span-4 bg-white rounded-2xl border border-slate-200 p-4 shadow-card hover:border-slate-300 transition-all flex flex-col justify-between group">
+<div>
+<div class="relative rounded-xl overflow-hidden h-36 bg-slate-100 mb-3">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Cozy tactile design studio with handcrafted textured knitwear hanging on minimalist wood clothes rail, industrial sewing machine, yarn spools and clean neutral backdrop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqX5sgZWRnDSqPNuQgAg_i1JU_kCWdCZErAWQFQGZdztxmIITMSoBhm5UO5gEytlZfdv6hFNYTMommJfNC0zdoF1hHs9z_IFog4ih8PlVsnD6krMnzog-epNh3_EQ8tQsXmH8qq3piq_5JG4_ExZDPjMRUf2vtHgSYyqecVPzFNM9CoVv9eAFEnruczguQ10ZiNX6PRyc-pGldWlgQff4yYaf0GdFYnZfgcDca15B0"/>
+<span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-white/95 backdrop-blur text-xs font-semibold text-slate-800 shadow-sm">
+                  Textile Studio
+                </span>
+<span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-white/95 backdrop-blur text-xs font-semibold text-purple-700 shadow-sm">
+                  15 Seats
+                </span>
+</div>
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">Knitting &amp; Textile Fab</h3>
+<span class="text-xs font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded">Free Workshop</span>
+</div>
+<p class="text-xs text-slate-500">Design Annex · Studio 4</p>
+<!-- Session Highlight -->
+<div class="mt-3 p-2.5 rounded-xl bg-purple-50/70 border border-purple-100 flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-[20px] text-purple-600">palette</span>
+<div>
+<div class="text-xs font-bold text-purple-900">Drop-in Workshop Today (4:00 PM)</div>
+<div class="text-[11px] text-purple-700">Open weaving &amp; sewing circle with mentors</div>
+</div>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold transition-colors text-center shadow-sm">
+              Drop-in (No Cert Needed)
+            </button>
+</article>
+</section>
+<!-- Bottom Section: Free Community Programs & Open Sessions -->
+<section class="bg-white border border-slate-200 rounded-2xl p-6 shadow-card">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+<div>
+<div class="flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+<span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                Free Student Support
+              </div>
+<h2 class="text-xl font-bold text-slate-900 tracking-tight mt-1">Free Community Programs &amp; Open Sessions</h2>
+<p class="text-xs sm:text-sm text-slate-500">Campus facilities open for peer tutoring, study hours, career roadmaps, and student wellbeing.</p>
+</div>
+<div>
+<button class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">calendar_month</span>
+<span>Full Schedule</span>
+</button>
+</div>
+</div>
+<!-- 4 Friendly Community Program Modules -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Program 1: Free Study Center -->
+<div class="bg-slate-50 hover:bg-blue-50/40 border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between transition-all group">
+<div>
+<div class="flex items-center justify-between mb-3">
+<div class="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700">
+<span class="material-symbols-outlined text-[20px]">menu_book</span>
+</div>
+<span class="text-xs font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">14 Desks Free</span>
+</div>
+<h4 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">24/7 Study Hub</h4>
+<p class="text-xs text-slate-500 mt-1 leading-relaxed">Quiet study carrels with ergonomic chairs, monitors, and fast campus WiFi.</p>
+<div class="mt-3 text-xs text-slate-400 font-medium">West Library · Fl 1</div>
+</div>
+<div class="pt-4 mt-4 border-t border-slate-200/80 flex items-center justify-between">
+<span class="text-[11px] text-slate-500">Instant Access</span>
+<button class="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors shadow-sm">
+                  Claim Desk
+                </button>
+</div>
+</div>
+<!-- Program 2: Career Circle -->
+<div class="bg-slate-50 hover:bg-amber-50/40 border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between transition-all group">
+<div>
+<div class="flex items-center justify-between mb-3">
+<div class="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center text-amber-700">
+<span class="material-symbols-outlined text-[20px]">work</span>
+</div>
+<span class="text-xs font-semibold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">8 Slots Left</span>
+</div>
+<h4 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">Tech Career Circle</h4>
+<p class="text-xs text-slate-500 mt-1 leading-relaxed">Resume reviews and engineering roadmaps with visiting tech alumni.</p>
+<div class="mt-3 text-xs text-slate-400 font-medium">Today · 6:30 PM</div>
+</div>
+<div class="pt-4 mt-4 border-t border-slate-200/80 flex items-center justify-between">
+<span class="text-[11px] text-slate-500">Seminar Hall B</span>
+<button class="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-blue-600 text-white text-xs font-semibold transition-colors">
+                  1-Click RSVP
+                </button>
+</div>
+</div>
+<!-- Program 3: AI Hardware Sprint -->
+<div class="bg-slate-50 hover:bg-emerald-50/40 border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between transition-all group">
+<div>
+<div class="flex items-center justify-between mb-3">
+<div class="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700">
+<span class="material-symbols-outlined text-[20px]">memory</span>
+</div>
+<span class="text-xs font-semibold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Materials Provided</span>
+</div>
+<h4 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">AI Hardware Sprint</h4>
+<p class="text-xs text-slate-500 mt-1 leading-relaxed">Hands-on micro-controller setup and practical embedded AI deployment clinic.</p>
+<div class="mt-3 text-xs text-slate-400 font-medium">Tomorrow · FabLab 3</div>
+</div>
+<div class="pt-4 mt-4 border-t border-slate-200/80 flex items-center justify-between">
+<span class="text-[11px] text-slate-500">Free to join</span>
+<button class="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors shadow-sm">
+                  Join Free
+                </button>
+</div>
+</div>
+<!-- Program 4: Health & Wellness Desk -->
+<div class="bg-slate-50 hover:bg-rose-50/40 border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between transition-all group">
+<div>
+<div class="flex items-center justify-between mb-3">
+<div class="w-9 h-9 rounded-xl bg-rose-100 flex items-center justify-center text-rose-700">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+</div>
+<span class="text-xs font-semibold text-rose-700 bg-rose-100 px-2 py-0.5 rounded-full">No Booking Needed</span>
+</div>
+<h4 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">Student Wellness Desk</h4>
+<p class="text-xs text-slate-500 mt-1 leading-relaxed">Walk-in health advice, ergonomics consultations, and mental wellbeing care.</p>
+<div class="mt-3 text-xs text-slate-400 font-medium">Daily · 10:00 - 17:00</div>
+</div>
+<div class="pt-4 mt-4 border-t border-slate-200/80 flex items-center justify-between">
+<span class="text-[11px] text-slate-500">Infirmary Pod 2</span>
+<button class="px-3.5 py-1.5 rounded-lg border border-slate-300 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 text-slate-700 text-xs font-semibold transition-colors">
+                  Show Map
+                </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<script>
+    // Simple tactile pill switchers
+    document.querySelectorAll('#resource-tabs button').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('#resource-tabs button').forEach(b => {
+          b.className = 'px-4 py-2 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all whitespace-nowrap';
+        });
+        button.className = 'px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-sm transition-all whitespace-nowrap';
+      });
+    });
+  </script>
+</body></html>

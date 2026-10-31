@@ -1,19 +1,33 @@
-﻿import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { CalendarX, History, LogIn, LogOut, AlertTriangle, Info } from "lucide-react";
+import { 
+  CalendarX, 
+  History, 
+  LogIn, 
+  LogOut, 
+  AlertTriangle, 
+  Info, 
+  Ticket, 
+  Sparkles,
+  Plus
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { EmptyState, Img, ListSkeleton, PageHeader, StatusBadge, Timeline, fmtD, useFakeLoad } from "@/components/shared";
+import { EmptyState, ListSkeleton, PageHeader, Timeline, useFakeLoad } from "@/components/shared";
 import { useApp, useMe } from "@/store/app";
-import { explain } from "@/lib/logic";
 import type { Booking } from "@/data/types";
-import { d } from "@/data/mock";
-import { Countdown, DemandBadge } from "@/components/contest";
+import { CinemaTicketCard } from "@/components/booking/CinemaTicketCard";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/bookings")({
-  head: () => ({ meta: [{ title: "My bookings — CampusSphare" }, { name: "description", content: "Track your requests, check in, return and see the full history." }, { property: "og:title", content: "My bookings — CampusSphare" }, { property: "og:description", content: "Track your space and equipment requests." }] }),
-  component: Bookings,
+  head: () => ({
+    meta: [
+      { title: "Booking Seat — CampusSphare" },
+      { name: "description", content: "View your booked seats, check in with QR code, cancel or extend your lab sessions." },
+    ],
+  }),
+  component: BookingsPage,
 });
 
 const TABS: Record<string, Booking["status"][]> = {
@@ -21,61 +35,196 @@ const TABS: Record<string, Booking["status"][]> = {
   past: ["completed", "rejected", "cancelled"],
 };
 
-function Bookings() {
+function BookingsPage() {
   const me = useMe();
   const allBookings = useApp((s) => s.bookings);
-  const all = allBookings.filter((b) => b.userId === me.id);
   const resources = useApp((s) => s.resources);
   const cancel = useApp((s) => s.cancelBooking);
-  const { withdraw, acceptOffer, declineOffer, contests } = useApp();
+  const extendBooking = useApp((s) => s.extendBooking);
+  const { acceptOffer, declineOffer } = useApp();
+
   const [tab, setTab] = useState("upcoming");
-  const [open, setOpen] = useState<Booking | null>(null);
+  const [selectedBookingForHistory, setSelectedBookingForHistory] = useState<Booking | null>(null);
   const loading = useFakeLoad();
-  const list = all.filter((b) => TABS[tab].includes(b.status));
-  const live = open ? all.find((b) => b.id === open.id) ?? open : null;
+
+  // Filter bookings for active user
+  const userBookings = allBookings.filter((b) => b.userId === me.id);
+  const list = userBookings.filter((b) => TABS[tab].includes(b.status));
+
+  const handleCancelBooking = (bookingId: string) => {
+    cancel(bookingId);
+    toast.success("Booking cancelled", {
+      description: "Seat released instantly and offered to the waiting list.",
+    });
+  };
+
+  const handleExtendBooking = (bookingId: string, hours: number) => {
+    extendBooking(bookingId, hours);
+    toast.success(`Booking extended by +${hours} hour(s)!`);
+  };
+
   return (
-    <div>
-      <PageHeader title="My bookings" subtitle="Every request, its status and the reason behind each decision." actions={<Button asChild variant="hero"><Link to="/discover">New request</Link></Button>} />
-      {all.filter((b) => b.offerExpires && b.status === "waitlisted").map((b) => (
-        <div key={b.id} role="alert" className="bg-contested mb-4 flex flex-col gap-3 rounded-2xl border border-st-waitlisted/40 p-4 sm:flex-row sm:items-center">
-          <div className="flex-1"><div className="font-semibold">A slot freed up: {resources.find((r) => r.id === b.resourceId)?.name}</div><div className="text-sm">You're first on the waiting list. Accept within <Countdown iso={b.offerExpires!} className="font-bold" /> or it goes to the next person.</div></div>
-          <div className="flex gap-2"><Button variant="success" onClick={() => acceptOffer(b.id)}>Accept</Button><Button variant="outline" onClick={() => declineOffer(b.id)}>Decline</Button></div>
+    <div className="max-w-4xl mx-auto space-y-6 pb-20">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+              <Ticket className="w-4 h-4" />
+            </div>
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+              Booking Seat
+            </h1>
+          </div>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Manage your reserved seats and passes for labs, workstations and seminar venues.
+          </p>
         </div>
-      ))}
-      <Tabs value={tab} onValueChange={setTab} className="mb-4"><TabsList><TabsTrigger value="upcoming">Upcoming</TabsTrigger><TabsTrigger value="past">Past</TabsTrigger></TabsList></Tabs>
-      {loading ? <ListSkeleton /> : list.length === 0 ? (
-        <EmptyState icon={CalendarX} title={tab === "upcoming" ? "No upcoming bookings" : "Nothing here yet"} body="Find a lab, hall or piece of equipment to request." action={<Button asChild><Link to="/discover">Discover spaces</Link></Button>} />
+
+        <Link
+          to="/discover"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-md transition-all active:scale-95 self-start sm:self-auto"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Book New Seat</span>
+        </Link>
+      </div>
+
+      {/* Waiting List Urgent Offer Notification */}
+      {userBookings
+        .filter((b) => b.offerExpires && b.status === "waitlisted")
+        .map((b) => {
+          const res = resources.find((r) => r.id === b.resourceId);
+          return (
+            <div
+              key={b.id}
+              role="alert"
+              className="bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
+            >
+              <div className="flex items-start gap-3">
+                <Sparkles className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-sm font-bold text-slate-900 dark:text-white">
+                    A seat freed up: {res?.name}
+                  </div>
+                  <div className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
+                    You're #1 on the waiting list! Accept within <strong>2 hours</strong> before it's offered to the next applicant.
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 self-end sm:self-auto">
+                <button
+                  onClick={() => {
+                    acceptOffer(b.id);
+                    toast.success("Offer accepted! Ticket confirmed.");
+                  }}
+                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all"
+                >
+                  Accept & Book
+                </button>
+                <button
+                  onClick={() => {
+                    declineOffer(b.id);
+                    toast.info("Offer declined and passed to next applicant.");
+                  }}
+                  className="px-3 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold rounded-xl text-slate-700 dark:text-slate-300"
+                >
+                  Decline
+                </button>
+              </div>
+            </div>
+          );
+        })}
+
+      {/* Tabs */}
+      <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+        <Tabs value={tab} onValueChange={setTab}>
+          <TabsList className="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+            <TabsTrigger value="upcoming" className="text-xs font-bold px-4 rounded-lg">
+              Active & Upcoming ({userBookings.filter((b) => TABS.upcoming.includes(b.status)).length})
+            </TabsTrigger>
+            <TabsTrigger value="past" className="text-xs font-bold px-4 rounded-lg">
+              Past & Cancelled ({userBookings.filter((b) => TABS.past.includes(b.status)).length})
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        <span className="text-xs text-slate-400 hidden sm:inline-block">
+          Tap ticket to view QR code
+        </span>
+      </div>
+
+      {/* Loading & Tickets List */}
+      {loading ? (
+        <ListSkeleton />
+      ) : list.length === 0 ? (
+        <EmptyState
+          icon={CalendarX}
+          title={tab === "upcoming" ? "No upcoming booking seats" : "No past booking seats"}
+          body="Pick a computer lab, electronics bench, 3D printer or seminar hall to book in under 20 seconds."
+          action={
+            <Button asChild className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl">
+              <Link to="/discover">Discover Spaces</Link>
+            </Button>
+          }
+        />
       ) : (
-        <ul className="space-y-3">
-          {list.map((b) => {
-            const r = resources.find((x) => x.id === b.resourceId)!;
+        <div className="space-y-4">
+          {list.map((booking) => {
+            const resource = resources.find((r) => r.id === booking.resourceId);
             return (
-              <li key={b.id} className="flex flex-col gap-4 rounded-2xl border bg-card p-4 shadow-soft sm:flex-row sm:items-center">
-                <Img src={r.image} alt="" className="h-20 w-full rounded-xl sm:w-28" />
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2"><span className="font-semibold">{r.name}</span><StatusBadge status={b.status} />{b.status === "pending" && b.contestId && <DemandBadge contest={contests.find((c) => c.id === b.contestId)} />}{b.waitPos && b.status === "waitlisted" && <span className="text-xs font-medium text-st-waitlisted">#{b.waitPos} in line</span>}</div>
-                  <div className="text-sm text-muted-foreground">{fmtD(b.date)} · {b.start} · {b.duration}h · {b.purpose}</div>
-                  <p className="mt-1 flex gap-1.5 text-sm"><Info className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />{explain(b.status, b.reason)}</p>
+              <div key={booking.id} className="relative">
+                <CinemaTicketCard
+                  booking={booking}
+                  resource={resource}
+                  onCancel={handleCancelBooking}
+                  onExtend={handleExtendBooking}
+                />
+
+                {/* Audit Timeline Trigger Button */}
+                <div className="mt-1 text-right">
+                  <button
+                    onClick={() => setSelectedBookingForHistory(booking)}
+                    className="text-[11px] font-semibold text-slate-400 hover:text-indigo-600 transition-colors inline-flex items-center gap-1"
+                  >
+                    <History className="w-3 h-3" />
+                    <span>View Audit Trail ({booking.timeline?.length || 1} events)</span>
+                  </button>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {b.status === "approved" && b.date <= d(30) && <Button asChild size="sm" variant="teal"><Link to="/checkin/$id" params={{ id: b.id }}><LogIn /> Check in</Link></Button>}
-                  {b.status === "active" && <Button asChild size="sm" variant="teal"><Link to="/return/$id" params={{ id: b.id }}><LogOut /> Return</Link></Button>}
-                  <Button size="sm" variant="ghost" onClick={() => setOpen(b)}><History /> Timeline</Button>
-                  {b.contestId && contests.find((c) => c.id === b.contestId) && <Button asChild size="sm" variant="outline"><Link to="/contests/$id" params={{ id: b.contestId }}>Contest</Link></Button>}
-                  {["pending", "waitlisted", "approved"].includes(b.status) && <Button size="sm" variant="ghost" onClick={() => (b.status === "pending" && b.contestId ? withdraw(b.id) : cancel(b.id))}>{b.status === "pending" && b.contestId ? "Withdraw" : "Cancel"}</Button>}
-                </div>
-              </li>
+              </div>
             );
           })}
-        </ul>
+        </div>
       )}
-      <Sheet open={!!live} onOpenChange={(o) => !o && setOpen(null)}>
+
+      {/* Audit History Sheet Drawer */}
+      <Sheet
+        open={Boolean(selectedBookingForHistory)}
+        onOpenChange={(open) => !open && setSelectedBookingForHistory(null)}
+      >
         <SheetContent>
-          <SheetHeader><SheetTitle>Booking history</SheetTitle><SheetDescription>Append-only record shared with the space owner.</SheetDescription></SheetHeader>
-          {live && <div className="px-4"><Timeline events={live.timeline} /></div>}
+          <SheetHeader>
+            <SheetTitle className="text-base font-bold">Ticket Audit Trail</SheetTitle>
+            <SheetDescription className="text-xs text-slate-500">
+              Cryptographically timestamped actions: request created, seat selected, confirmed, cancelled, check-in, return.
+            </SheetDescription>
+          </SheetHeader>
+          {selectedBookingForHistory && (
+            <div className="px-4 py-4">
+              <div className="mb-4 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
+                <div className="font-bold text-slate-900 dark:text-white">
+                  Ticket #{selectedBookingForHistory.ticketCode || selectedBookingForHistory.id}
+                </div>
+                <div className="text-slate-500 mt-0.5">
+                  {selectedBookingForHistory.date} · {selectedBookingForHistory.start}
+                </div>
+              </div>
+              <Timeline events={selectedBookingForHistory.timeline || []} />
+            </div>
+          )}
         </SheetContent>
       </Sheet>
     </div>
   );
 }
-

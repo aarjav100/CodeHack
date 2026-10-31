@@ -28,12 +28,14 @@ import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProgramsRouteImport } from './routes/programs'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SpeakersRouteImport } from './routes/speakers'
 import { Route as StudyRouteImport } from './routes/study'
 import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
 import { Route as WaitlistsRouteImport } from './routes/waitlists'
 import { Route as WorkshopsRouteImport } from './routes/workshops'
+import { Route as AdminRoleRequestsRouteImport } from './routes/admin.role-requests'
 import { Route as BookIdRouteImport } from './routes/book.$id'
 import { Route as CheckinIdRouteImport } from './routes/checkin.$id'
 import { Route as ContestsIdRouteImport } from './routes/contests.$id'
@@ -139,6 +141,11 @@ const ProgramsRoute = ProgramsRouteImport.update({
   path: '/programs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SpeakersRoute = SpeakersRouteImport.update({
   id: '/speakers',
   path: '/speakers',
@@ -168,6 +175,11 @@ const WorkshopsRoute = WorkshopsRouteImport.update({
   id: '/workshops',
   path: '/workshops',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoleRequestsRoute = AdminRoleRequestsRouteImport.update({
+  id: '/role-requests',
+  path: '/role-requests',
+  getParentRoute: () => AdminRoute,
 } as any)
 const BookIdRoute = BookIdRouteImport.update({
   id: '/book/$id',
@@ -217,7 +229,7 @@ const ReturnIdRoute = ReturnIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/approvals': typeof ApprovalsRoute
   '/audit': typeof AuditRoute
   '/bookings': typeof BookingsRoute
@@ -235,12 +247,14 @@ export interface FileRoutesByFullPath {
   '/partners': typeof PartnersRoute
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
+  '/signup': typeof SignupRoute
   '/speakers': typeof SpeakersRoute
   '/study': typeof StudyRoute
   '/verify': typeof VerifyRoute
   '/volunteer': typeof VolunteerRoute
   '/waitlists': typeof WaitlistsRoute
   '/workshops': typeof WorkshopsRoute
+  '/admin/role-requests': typeof AdminRoleRequestsRoute
   '/book/$id': typeof BookIdRoute
   '/checkin/$id': typeof CheckinIdRoute
   '/contests/$id': typeof ContestsIdRoute
@@ -253,7 +267,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/approvals': typeof ApprovalsRoute
   '/audit': typeof AuditRoute
   '/bookings': typeof BookingsRoute
@@ -271,12 +285,14 @@ export interface FileRoutesByTo {
   '/partners': typeof PartnersRoute
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
+  '/signup': typeof SignupRoute
   '/speakers': typeof SpeakersRoute
   '/study': typeof StudyRoute
   '/verify': typeof VerifyRoute
   '/volunteer': typeof VolunteerRoute
   '/waitlists': typeof WaitlistsRoute
   '/workshops': typeof WorkshopsRoute
+  '/admin/role-requests': typeof AdminRoleRequestsRoute
   '/book/$id': typeof BookIdRoute
   '/checkin/$id': typeof CheckinIdRoute
   '/contests/$id': typeof ContestsIdRoute
@@ -290,7 +306,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/approvals': typeof ApprovalsRoute
   '/audit': typeof AuditRoute
   '/bookings': typeof BookingsRoute
@@ -308,12 +324,14 @@ export interface FileRoutesById {
   '/partners': typeof PartnersRoute
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
+  '/signup': typeof SignupRoute
   '/speakers': typeof SpeakersRoute
   '/study': typeof StudyRoute
   '/verify': typeof VerifyRoute
   '/volunteer': typeof VolunteerRoute
   '/waitlists': typeof WaitlistsRoute
   '/workshops': typeof WorkshopsRoute
+  '/admin/role-requests': typeof AdminRoleRequestsRoute
   '/book/$id': typeof BookIdRoute
   '/checkin/$id': typeof CheckinIdRoute
   '/contests/$id': typeof ContestsIdRoute
@@ -346,12 +364,14 @@ export interface FileRouteTypes {
     | '/partners'
     | '/profile'
     | '/programs'
+    | '/signup'
     | '/speakers'
     | '/study'
     | '/verify'
     | '/volunteer'
     | '/waitlists'
     | '/workshops'
+    | '/admin/role-requests'
     | '/book/$id'
     | '/checkin/$id'
     | '/contests/$id'
@@ -382,12 +402,14 @@ export interface FileRouteTypes {
     | '/partners'
     | '/profile'
     | '/programs'
+    | '/signup'
     | '/speakers'
     | '/study'
     | '/verify'
     | '/volunteer'
     | '/waitlists'
     | '/workshops'
+    | '/admin/role-requests'
     | '/book/$id'
     | '/checkin/$id'
     | '/contests/$id'
@@ -418,12 +440,14 @@ export interface FileRouteTypes {
     | '/partners'
     | '/profile'
     | '/programs'
+    | '/signup'
     | '/speakers'
     | '/study'
     | '/verify'
     | '/volunteer'
     | '/waitlists'
     | '/workshops'
+    | '/admin/role-requests'
     | '/book/$id'
     | '/checkin/$id'
     | '/contests/$id'
@@ -437,7 +461,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   ApprovalsRoute: typeof ApprovalsRoute
   AuditRoute: typeof AuditRoute
   BookingsRoute: typeof BookingsRoute
@@ -455,6 +479,7 @@ export interface RootRouteChildren {
   PartnersRoute: typeof PartnersRoute
   ProfileRoute: typeof ProfileRoute
   ProgramsRoute: typeof ProgramsRoute
+  SignupRoute: typeof SignupRoute
   SpeakersRoute: typeof SpeakersRoute
   StudyRoute: typeof StudyRoute
   VerifyRoute: typeof VerifyRoute
@@ -606,6 +631,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/speakers': {
       id: '/speakers'
       path: '/speakers'
@@ -647,6 +679,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/workshops'
       preLoaderRoute: typeof WorkshopsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/role-requests': {
+      id: '/admin/role-requests'
+      path: '/role-requests'
+      fullPath: '/admin/role-requests'
+      preLoaderRoute: typeof AdminRoleRequestsRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/book/$id': {
       id: '/book/$id'
@@ -714,6 +753,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminRoleRequestsRoute: typeof AdminRoleRequestsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminRoleRequestsRoute: AdminRoleRequestsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface HealthRouteChildren {
   HealthIdRoute: typeof HealthIdRoute
 }
@@ -727,7 +776,7 @@ const HealthRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   ApprovalsRoute: ApprovalsRoute,
   AuditRoute: AuditRoute,
   BookingsRoute: BookingsRoute,
@@ -745,6 +794,7 @@ const rootRouteChildren: RootRouteChildren = {
   PartnersRoute: PartnersRoute,
   ProfileRoute: ProfileRoute,
   ProgramsRoute: ProgramsRoute,
+  SignupRoute: SignupRoute,
   SpeakersRoute: SpeakersRoute,
   StudyRoute: StudyRoute,
   VerifyRoute: VerifyRoute,
