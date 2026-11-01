@@ -168,9 +168,11 @@ export function SeatBookingGuideModal() {
                     </div>
                   </div>
                   <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950 text-teal-600 flex items-center justify-center font-bold">
-                      <Sparkles className="w-5 h-5" />
-                    </div>
+                    <img 
+                      src="/images/3d-printer-bay.jpg" 
+                      alt="3D Printer Bay" 
+                      className="w-10 h-10 rounded-xl object-cover shrink-0 border border-slate-250 dark:border-slate-700 shadow-2xs" 
+                    />
                     <div>
                       <div className="text-xs font-bold text-slate-900 dark:text-white">3D Printer Bay</div>
                       <div className="text-[11px] text-slate-500">4 Printers · Prusa MK4</div>

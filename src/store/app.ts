@@ -889,6 +889,7 @@ export const useApp = create<State>((set, get) => ({
       duration: slot.duration,
       purpose: data.purpose || `Seat Booking for ${data.seatIds.join(", ")}`,
       purposeCategory: data.purposeCategory || "Study & Research",
+      reason: data.purpose || `Seat Booking for ${data.seatIds.join(", ")}`,
       attachments: [],
       status,
       recommendation: "approve",
@@ -899,7 +900,7 @@ export const useApp = create<State>((set, get) => ({
       groupSize: data.groupSize || data.seatIds.length,
       ticketCode,
       timeline: [
-        { at, actor: me.name, text: isInstant ? "Confirmed instantly" : "Seat booking request submitted" }
+        { at, actor: me.name, text: isInstant ? "Confirmed instantly" : `Seat booking request submitted: ${data.purpose || "Coursework"}` }
       ],
     };
 
@@ -907,13 +908,13 @@ export const useApp = create<State>((set, get) => ({
     s.log(
       isInstant ? "booking.seat_confirmed" : "booking.seat_requested",
       res.name,
-      `${data.seatIds.join(", ")} on ${data.date} (${slot.start}) - ${isInstant ? "Instant Confirm" : "Queued"}`
+      `${data.seatIds.join(", ")} on ${data.date} (${slot.start}) - ${data.purpose || "Seat Reservation"} - ${isInstant ? "Instant Confirm" : "Queued"}`
     );
 
     s.notify(me.id, {
       type: "approval",
       title: isInstant ? `Confirmed: ${res.name}` : `Request Sent: ${res.name}`,
-      body: `Seat ${data.seatIds.join(", ")} on ${data.date} at ${slot.start}. Ticket: ${ticketCode}`,
+      body: `Seat ${data.seatIds.join(", ")} on ${data.date} at ${slot.start} (${data.purpose || "Reserved"}). Ticket: ${ticketCode}`,
       link: "/bookings",
     });
 

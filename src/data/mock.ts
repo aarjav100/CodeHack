@@ -86,7 +86,7 @@ export const resources: Resource[] = [
     seatLayout: create3DPrinterLayout(),
     slots: DEFAULT_SLOTS,
     maxSeatsPerBooking: 1,
-    image: u("photo-1631541909061-71e349d1f203"),
+    image: "/images/3d-printer-bay.jpg",
     description: "Four precision FDM 3D printers with PLA, PETG and high-temp industrial nozzles. Requires safety certification on high-temp unit.",
     rules: ["Max 4 hours print run per reservation", "Check bed adhesion before walking away", "Report filament jams"],
     requirements: [verifiedReq, R("r-stu", "Enrolled college student", "student")],

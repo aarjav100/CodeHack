@@ -27,6 +27,7 @@ import { StickyBookingBar } from "@/components/booking/StickyBookingBar";
 import { VenueTimeline } from "@/components/booking/VenueTimeline";
 import { VenueBookingSheet } from "@/components/booking/VenueBookingSheet";
 import { BookingConfirmationModal } from "@/components/booking/BookingConfirmationModal";
+import { SeatReasonModal } from "@/components/booking/SeatReasonModal";
 import type { Booking, Resource, SlotDefinition } from "@/data/types";
 import { 
   resolveSeatStatus, 
@@ -111,6 +112,7 @@ function CinemaBookPage() {
   const [confirmedBooking, setConfirmedBooking] = useState<Booking | null>(null);
   const [isInstantConfirmed, setIsInstantConfirmed] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isReasonModalOpen, setIsReasonModalOpen] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [trainingToUnlock, setTrainingToUnlock] = useState<string | null>(null);
 
@@ -178,7 +180,7 @@ function CinemaBookPage() {
     return 0;
   }, [bookings, resource.id, selectedDate, selectedSlot.start, selectedRange, mode]);
 
-  // Handle Mode 1: Submit Seat Request
+  // Handle Mode 1: Submit Seat Request - Prompts for Reason of booking
   const handleSeatSubmit = () => {
     if (selectedSeats.length === 0 && !isWholeLab) {
       toast.error("Please pick at least one seat first!");
@@ -191,6 +193,11 @@ function CinemaBookPage() {
       return;
     }
 
+    // Prompt user for reason and purpose
+    setIsReasonModalOpen(true);
+  };
+
+  const handleConfirmSeatReason = (reasonData: { purpose: string; purposeCategory: string }) => {
     try {
       const { booking, isInstant } = bookSeat({
         resourceId: resource.id,
@@ -199,8 +206,11 @@ function CinemaBookPage() {
         seatIds: selectedSeats,
         isWholeLab,
         groupSize: selectedSeats.length,
+        purpose: reasonData.purpose,
+        purposeCategory: reasonData.purposeCategory,
       });
 
+      setIsReasonModalOpen(false);
       setConfirmedBooking(booking);
       setIsInstantConfirmed(isInstant);
       setShowConfirmation(true);
@@ -280,6 +290,13 @@ function CinemaBookPage() {
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
+            {resource.image && (
+              <img
+                src={resource.image}
+                alt={resource.name}
+                className="w-10 h-10 rounded-xl object-cover border border-slate-200 dark:border-slate-750 shadow-2xs shrink-0 hidden sm:block"
+              />
+            )}
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-tight">
@@ -512,6 +529,20 @@ function CinemaBookPage() {
         resource={resource}
         isInstant={isInstantConfirmed}
         competingCount={competingRequestsCount}
+      />
+
+      {/* Reason for Booking Seat Modal */}
+      <SeatReasonModal
+        isOpen={isReasonModalOpen}
+        onClose={() => setIsReasonModalOpen(false)}
+        resourceName={resource.name}
+        dateStr={selectedDate}
+        slotLabel={selectedSlot.label || `${selectedSlot.start} - ${selectedSlot.end}`}
+        selectedSeats={selectedSeats}
+        isWholeLab={isWholeLab}
+        isInstantConfirm={Boolean(resource.instantConfirm && competingRequestsCount === 0)}
+        competingRequestsCount={competingRequestsCount}
+        onSubmit={handleConfirmSeatReason}
       />
 
       {/* Inline Verification Modal */}

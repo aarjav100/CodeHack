@@ -173,10 +173,18 @@ export const CinemaTicketCard: React.FC<CinemaTicketCardProps> = ({
             </div>
 
             {/* Plain-Language Reason / Status note */}
-            {booking.reason && (
+            {(booking.reason || booking.purpose) && (
               <div className="bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-150 dark:border-indigo-900/40 rounded-xl p-2.5 text-xs text-indigo-900 dark:text-indigo-200 flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
-                <span>{booking.reason}</span>
+                <div>
+                  <span className="font-bold">Reason: </span>
+                  {booking.purposeCategory && (
+                    <span className="font-semibold text-indigo-700 dark:text-indigo-300 mr-1">
+                      [{booking.purposeCategory}]
+                    </span>
+                  )}
+                  <span>{booking.reason || booking.purpose}</span>
+                </div>
               </div>
             )}
 

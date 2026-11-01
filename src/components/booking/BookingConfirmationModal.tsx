@@ -107,6 +107,23 @@ export const BookingConfirmationModal: React.FC<BookingConfirmationModalProps> =
               <QrCode className="w-12 h-12 text-slate-800 dark:text-slate-200" />
             </div>
           </div>
+
+          {/* Reason / Purpose display on ticket */}
+          {(booking.purpose || booking.reason) && (
+            <div className="mt-3 pt-2.5 border-t border-dashed border-slate-250 dark:border-slate-750 text-left">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Reason for Booking
+              </div>
+              <div className="text-xs font-semibold text-slate-800 dark:text-slate-200 mt-0.5 line-clamp-2">
+                {booking.purposeCategory ? (
+                  <span className="text-indigo-600 dark:text-indigo-400 font-bold mr-1">
+                    [{booking.purposeCategory}]
+                  </span>
+                ) : null}
+                {booking.purpose || booking.reason}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Action Buttons */}
